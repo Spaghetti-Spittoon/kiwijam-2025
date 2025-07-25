@@ -4,17 +4,11 @@
 
 [node name="MainWindow" type="Node2D"]
 
-[node name="Window" type="Window" parent="."]
-mode = 3
-title = "Kiwijam 2025"
-initial_position = 2
-size = Vector2i(1366, 768)
+[node name="HomeScreen" parent="." instance=ExtResource("1_ac7cv")]
+custom_minimum_size = Vector2(1366, 768)
+offset_top = -8.0
+offset_right = 1366.0
+offset_bottom = 760.0
 
-[node name="HomeScreen" parent="Window" instance=ExtResource("1_ac7cv")]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-
-[node name="Camera2D" type="Camera2D" parent="Window"]
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0

@@ -1,19 +1,71 @@
-[gd_scene load_steps=2 format=3 uid="uid://d24ejwlug3kla"]
+[gd_scene load_steps=10 format=3 uid="uid://d24ejwlug3kla"]
 
 [ext_resource type="Texture2D" uid="uid://cu80jjo3c34yh" path="res://assets/home.png" id="1_d6bf7"]
+[ext_resource type="Script" uid="uid://kdkgm6g8dlwf" path="res://scripts/StartButton.cs" id="2_3ie6y"]
+[ext_resource type="Texture2D" uid="uid://c3q4jf8hdoobg" path="res://assets/startbutton.png" id="2_dki4i"]
+[ext_resource type="Texture2D" uid="uid://c2yrc0cdsutbn" path="res://assets/quitbutton.png" id="3_3ie6y"]
+[ext_resource type="Script" uid="uid://ddu6y4d5xkvvl" path="res://scripts/QuitButton.cs" id="4_bjvx2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bjvx2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dki4i"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l1h2q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3ie6y"]
 
 [node name="HomeScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 2.0
+offset_bottom = -80.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
 
 [node name="Home" type="Sprite2D" parent="CanvasLayer"]
-z_index = -1
-position = Vector2(632, 408)
-scale = Vector2(0.9, 0.9)
+position = Vector2(680, 384)
 texture = ExtResource("1_d6bf7")
+
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 424.0
+offset_right = 464.0
+offset_bottom = 472.0
+theme_override_colors/font_outline_color = Color(0.34902, 0.34902, 0.34902, 1)
+theme_override_colors/font_focus_color = Color(0.34902, 0.34902, 0.34902, 1)
+theme_override_colors/font_pressed_color = Color(0.34902, 0.34902, 0.34902, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bjvx2")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_dki4i")
+script = ExtResource("2_3ie6y")
+
+[node name="TextureRect" type="TextureRect" parent="StartButton"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_dki4i")
+metadata/_edit_lock_ = true
+
+[node name="QuitButton" type="Button" parent="."]
+offset_left = 904.0
+offset_top = 424.0
+offset_right = 1104.0
+offset_bottom = 472.0
+theme_override_colors/font_outline_color = Color(0.34902, 0.34902, 0.34902, 1)
+theme_override_colors/font_focus_color = Color(0.34902, 0.34902, 0.34902, 1)
+theme_override_colors/font_pressed_color = Color(0.34902, 0.34902, 0.34902, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l1h2q")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_3ie6y")
+script = ExtResource("4_bjvx2")
+
+[node name="TextureRect" type="TextureRect" parent="QuitButton"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_3ie6y")
+metadata/_edit_lock_ = true

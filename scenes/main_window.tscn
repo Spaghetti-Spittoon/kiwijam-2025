@@ -5,10 +5,6 @@
 [node name="MainWindow" type="Node2D"]
 
 [node name="HomeScreen" parent="." instance=ExtResource("1_ac7cv")]
-custom_minimum_size = Vector2(1366, 768)
-offset_top = -8.0
-offset_right = 1366.0
-offset_bottom = 760.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0

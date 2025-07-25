@@ -18,25 +18,13 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l1h2q"]
 
-[node name="HomeScreen" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 2.0
-offset_bottom = -80.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HomeScreen" type="CanvasLayer"]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = -1
-
-[node name="Home" type="Sprite2D" parent="CanvasLayer"]
+[node name="Background" type="Sprite2D" parent="."]
 position = Vector2(680, 384)
 texture = ExtResource("1_d6bf7")
 
 [node name="StartButton" type="Button" parent="."]
-layout_mode = 0
 offset_left = 264.0
 offset_top = 424.0
 offset_right = 464.0
@@ -57,7 +45,6 @@ texture = ExtResource("2_dki4i")
 metadata/_edit_lock_ = true
 
 [node name="QuitButton" type="Button" parent="."]
-layout_mode = 0
 offset_left = 904.0
 offset_top = 424.0
 offset_right = 1104.0

@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://eh0bjefcj7gu"]
+
+[ext_resource type="Texture2D" uid="uid://dql7bpiwffaeb" path="res://assets/sparky_move1.png" id="1_g2els"]
+[ext_resource type="Script" uid="uid://ca617tpbrmov7" path="res://scripts/Player.cs" id="1_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://cc5kcbn1l5dee" path="res://assets/sparky_move2.png" id="2_qhqgy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
+radius = 21.0238
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dqkch"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_g2els")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_qhqgy")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[node name="Player" type="Area2D"]
+script = ExtResource("1_qhqgy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_g2els")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dqkch")
+animation = &"move"
+frame_progress = 0.905374
+
+[connection signal="body_entered" from="." to="." method="OnBodyEntered"]

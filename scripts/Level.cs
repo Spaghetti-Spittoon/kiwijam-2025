@@ -15,6 +15,22 @@ public partial class Level : Node2D
 
     void OnLevelExpanded()
     {
-        mapLayer.
+        //Find the top level
+    }
+
+    TileSetSource GetNamedTile(string tileName) {
+        var tileset = mapLayer.TileSet;
+        var numTiles = tileset.GetSourceCount();
+
+        for (int i = 0; i < numTiles; i++)
+        {
+            var current = tileset.GetSource(i);
+
+            if (current.ResourceName == tileName)
+            {
+                return current;
+            }
+        }
+        return null;
     }
 }

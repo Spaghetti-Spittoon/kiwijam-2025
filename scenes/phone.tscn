@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://b0jn11d5vaqh"]
 
-[ext_resource type="Texture2D" uid="uid://dtrm6kx71svn2" path="res://assets/phone.png" id="1_08mii"]
+[ext_resource type="Texture2D" uid="uid://dmr3wkl327ilf" path="res://assets/Menu-TitleArt.png" id="1_08mii"]
 
 [node name="Phone" type="Node2D"]
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Menu-titleArt" type="Sprite2D" parent="."]
+position = Vector2(26, 29)
+scale = Vector2(0.305556, 0.332895)
 texture = ExtResource("1_08mii")

@@ -15,6 +15,8 @@ public partial class Player : Area2D
 	public Vector2 ScreenSize;
 	public Vector2I Direction = Vector2I.Right;
 
+	private TileMapLayer tileMapLayer;
+
 	public void Start(Vector2 position)
 	{
 		Position = position;
@@ -27,8 +29,9 @@ public partial class Player : Area2D
 		Instance = this;
 		ScreenSize = GetViewportRect().Size;
 		var parent = GetParent();
-		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");
-		map = new MapHandler(layer);
+		tileMapLayer = parent.GetNode<TileMapLayer>("TileMapLayer");
+		map = new MapHandler(tileMapLayer);
+		SetCameraTimeMapLayer();
 	}
 
 	public override void _Process(double delta)
@@ -101,7 +104,16 @@ public partial class Player : Area2D
 		{
 			animatedSprite2D.Stop();
 		}
+	}
 
+	private void SetCameraTimeMapLayer()
+	{
+		var camera = GetNode<Camera2D>("Camera2D") as CameraLimiter;
+
+		if (tileMapLayer != null)
+		{
+			camera.SetCameraLimits(tileMapLayer);
+		}
 	}
 
 	private void OnBodyEntered(Node2D body)

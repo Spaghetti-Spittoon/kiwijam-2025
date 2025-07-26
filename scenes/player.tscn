@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cddai83v88cgu"]
+[gd_scene load_steps=7 format=3 uid="uid://cddai83v88cgu"]
 
 [ext_resource type="Texture2D" uid="uid://dql7bpiwffaeb" path="res://assets/sparky_move1.png" id="1_g2els"]
 [ext_resource type="Script" uid="uid://ca617tpbrmov7" path="res://scripts/Player.cs" id="1_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://cc5kcbn1l5dee" path="res://assets/sparky_move2.png" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://bcllsx562tycl" path="res://scripts/CameraLimiter.cs" id="4_dqkch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
 radius = 21.0238
@@ -31,5 +32,8 @@ shape = SubResource("CircleShape2D_g2els")
 sprite_frames = SubResource("SpriteFrames_dqkch")
 animation = &"move"
 frame_progress = 0.905374
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("4_dqkch")
 
 [connection signal="body_entered" from="." to="." method="OnBodyEntered"]

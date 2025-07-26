@@ -38,39 +38,40 @@ public partial class Player : Area2D
 		if (map.HasPassedHalfTile(oldPos, Position, Direction) || Direction == Vector2.Zero)
 		{
 			Position = map.SnapToHalfTile(Position);
-			var directions = map.GetDirections(Position);
+			var tile = map.GetTileInfo(Position);
 
 			if (Input.IsActionPressed("move_up"))
 			{
-				if (Input.IsActionPressed("move_right") && directions.Contains(Vector2I.Right + Vector2I.Up))
+				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Up))
 				{
 					Direction = Vector2I.Right + Vector2I.Up;
 				}
-				if (Input.IsActionPressed("move_left") && directions.Contains(Vector2I.Left + Vector2I.Up))
+				if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Up))
 				{
 					Direction = Vector2I.Left + Vector2I.Up;
 				}
 			}
 			else if (Input.IsActionPressed("move_down"))
 			{
-				if (Input.IsActionPressed("move_right") && directions.Contains(Vector2I.Right + Vector2I.Down))
+				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Down))
 				{
 					Direction = Vector2I.Right + Vector2I.Down;
 				}
-				if (Input.IsActionPressed("move_left") && directions.Contains(Vector2I.Left + Vector2I.Down))
+				if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Down))
 				{
 					Direction = Vector2I.Left + Vector2I.Down;
 				}
 			}
 			else
 			{
-				if (Input.IsActionPressed("move_right") && directions.Contains(Vector2I.Right))
+				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
 				{
 					Direction = Vector2I.Right;
 				}
+
 				if (Input.IsActionPressed("move_left"))
 				{
-					if (directions.Contains(Vector2I.Left))
+					if (tile.Directions.Contains(Vector2I.Left))
 					{
 						Direction = Vector2I.Left;
 					}
@@ -82,7 +83,7 @@ public partial class Player : Area2D
 			}
 
 			//Stop if we're at a dead end
-			if (directions.Contains(Direction) == false)
+			if (tile.Directions.Contains(Direction) == false)
 			{
 				Direction = Vector2I.Zero;
 			}

@@ -33,9 +33,9 @@ public class MapHandler
 		_map = inputMap;
 	}
 
-	public Array<Vector2I> GetDirections(Vector2 pos)
+	public TileDefinition GetTileInfo(Vector2 pos)
 	{
-		var result = new Array<Vector2I>();
+		var result = new TileDefinition();
 
 		var halfX = PixelToHalfTile(pos.X);
 		var halfY = PixelToHalfTile(pos.Y);
@@ -57,13 +57,13 @@ public class MapHandler
 			var leftTile = GetTileInfo(fullX - 1, fullY);
 			var rightTile = GetTileInfo(fullX, fullY);
 
-			if (leftTile.Contains(Vector2I.Right))
+			if (leftTile.Directions.Contains(Vector2I.Right))
 			{
-				result.Add(Vector2I.Left);
+				result.Directions.Add(Vector2I.Left);
 			}
-			if (rightTile.Contains(Vector2I.Left))
+			if (rightTile.Directions.Contains(Vector2I.Left))
 			{
-				result.Add(Vector2I.Right);
+				result.Directions.Add(Vector2I.Right);
 			}
 		}
 
@@ -71,31 +71,31 @@ public class MapHandler
 		if (halfXOffset == 0 && halfYOffset == 0)
 		{
 			//Top left
-			if (GetTileInfo(fullX - 1, fullY - 1).Contains(Vector2I.Down + Vector2I.Right))
+			if (GetTileInfo(fullX - 1, fullY - 1).Directions.Contains(Vector2I.Down + Vector2I.Right))
 			{
-				result.Add(Vector2I.Up + Vector2I.Left);
+				result.Directions.Add(Vector2I.Up + Vector2I.Left);
 			}
 			//Top Right
-			if (GetTileInfo(fullX, fullY - 1).Contains(Vector2I.Down + Vector2I.Left))
+			if (GetTileInfo(fullX, fullY - 1).Directions.Contains(Vector2I.Down + Vector2I.Left))
 			{
-				result.Add(Vector2I.Up + Vector2I.Right);
+				result.Directions.Add(Vector2I.Up + Vector2I.Right);
 			}
 			//Bottom left
-			if (GetTileInfo(fullX - 1, fullY).Contains(Vector2I.Up + Vector2I.Right))
+			if (GetTileInfo(fullX - 1, fullY).Directions.Contains(Vector2I.Up + Vector2I.Right))
 			{
-				result.Add(Vector2I.Down + Vector2I.Left);
+				result.Directions.Add(Vector2I.Down + Vector2I.Left);
 			}
 			//Bottom Right
-			if (GetTileInfo(fullX, fullY).Contains(Vector2I.Up + Vector2I.Left))
+			if (GetTileInfo(fullX, fullY).Directions.Contains(Vector2I.Up + Vector2I.Left))
 			{
-				result.Add(Vector2I.Down + Vector2I.Right);
+				result.Directions.Add(Vector2I.Down + Vector2I.Right);
 			}
 		}
 
 		return result;
 	}
 
-	public Array<Vector2I> GetTileInfo(int x, int y)
+	public TileDefinition GetTileInfo(int x, int y)
 	{
 		var atlasPos = _map.GetCellAtlasCoords(new Vector2I(x, y));
 		var id = atlasPos.X + (atlasPos.Y * 5);
@@ -110,10 +110,12 @@ public class MapHandler
 		}
 		else
 		{
-			return TileDefinitions[id].Directions;
+			var match = TileDefinitions[id]; //set the Atlas Coordinates
+			match.AtlasCoordinates = atlasPos;
+			return match;
 		}
 
-		return new Array<Vector2I>();
+		return new TileDefinition();
 	}
 
 	public bool HasPassedHalfTile(Vector2 oldPos, Vector2 newPos, Vector2I Direction)

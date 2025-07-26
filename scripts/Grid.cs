@@ -1,67 +1,74 @@
-// using Godot;
-// using Godot.Collections;
-// using System;
-// using System.Collections.Generic;
+using Godot;
+using Godot.Collections;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
-// public partial class Grid : Node
-// {
-//     LinkedList<LinkedList<TileDefinition>> AllGridTiles;
+public partial class Grid : Node
+{
+    MapHandler mapHandler;
 
-//     public override void _Ready()
-//     {
-//         AllGridTiles = new LinkedList<LinkedList<TileDefinition>>();
-//     }
+    public void AddStartingLevel(TileMapLayer map)
+    {
+        mapHandler = new MapHandler(map);
+        var allCells = map.GetUsedCells();
 
-//     public void AddStartingLevel(TileMapLayer map)
-//     {
-//         var allCells = map.GetUsedCells();
+        //iterate through all cells
+        for (int index = 0; index < allCells.Count; index++)
+        {
+            var currentCellCoord = allCells[index];
 
-//         //iterate through all cells
-//         for (int index = 0; index < allCells.Count; index++)
-//         {
-//             var currentCellCoord = allCells[index];
-//             var currentTile = map.GetCellTileData(currentCellCoord);
+            //create the tile defintion
+            var tile = mapHandler.GetTileInfo(currentCellCoord.X, currentCellCoord.Y);
+        }
+    }
 
-//             //add a TileDefinition in the ordered linkedlists
-//             var newTile = new TileDefinition();
-//             InsertTile();
-//         }
-//         // int sourceId = map.GetCellSourceId(coords);
-//         // Vector2i atlasCoords = tileMapLayer.GetCellAtlasCoords(coords);
-//         // int alternativeId = tileMapLayer.GetCellAlternative(coords);
-//     }
 
-//     void InsertTile(TileDefinition newTile)
-//     {
-        
-//     }
+    LinkedListNode<NullablePair> CreateNewColumn(TileDefinition newTile)
+    {
+        var newColumnItem = new LinkedList<TileDefinition>();
+        newColumnItem.AddFirst(newTile);
 
-//     public int GetWidth()
-//     {
-//         return AllGridTiles.Count;
-//     }
+        var newPair = new NullablePair
+        {
+            Key = newTile.AtlasCoordinates.X,
+            Value = newColumnItem
+        };
+        var newNode = new LinkedListNode<NullablePair>(newPair);
+        return newNode;
+    }
 
-//     public int GetHeight()
-//     {
-//         return AllGridTiles[0].Count;
-//     }
+    void TryInsertAsRow() {
 
-//     public TileSetSource GetTile(int x, int y)
-//     {
-//         return AllGridTiles[x][y];
-//     }
+    }
 
-//     public void ExpandOneLevel(int x, int y)
-//     {
-//         //expand the grid with empty cells
+    // public int GetWidth()
+    // {
+    // }
 
-//         //iterate through all the empty cells
+    // public int GetHeight()
+    // {
+    // }
 
-//         //detect the cells adjacent to the current cell
+    // public TileSetSource GetTile(int x, int y)
+    // {
+    // }
 
-//         //determine which tile the current should be
+    public void ExpandOneLevel(int x, int y)
+    {
+        //expand the grid with empty cells
 
-//         //determine what the adjacent tiles should be
-//     }
-// }
+        //iterate through all the empty cells
 
+        //detect the cells adjacent to the current cell
+
+        //determine which tile the current should be
+
+        //determine what the adjacent tiles should be
+    }
+}
+
+public class NullablePair {
+    public required int Key;
+    public required LinkedList<TileDefinition> Value;
+}

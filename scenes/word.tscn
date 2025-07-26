@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8j2b4rujpnqa"]
+
+[ext_resource type="Script" uid="uid://djm65l71pch0g" path="res://scripts/Word.cs" id="1_ar2rp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ar2rp"]
+size = Vector2(10, 20)
+
+[node name="Word" type="Area2D" node_paths=PackedStringArray("Collision", "Text") groups=["words"]]
+script = ExtResource("1_ar2rp")
+Collision = NodePath("CollisionShape2D")
+Text = NodePath("RichTextLabel")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ar2rp")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -11.5
+offset_right = 43.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "super duper wooper"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="editor_state_changed" from="RichTextLabel" to="." method="OnTextResized"]
+[connection signal="minimum_size_changed" from="RichTextLabel" to="." method="OnTextResized"]
+[connection signal="resized" from="RichTextLabel" to="." method="OnTextResized"]

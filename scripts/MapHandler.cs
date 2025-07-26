@@ -48,18 +48,22 @@ public class MapHandler
 
 		// Convert local position to cell (map) coordinates
 		Vector2I cellPos = _map.LocalToMap(localPos);
+		Vector2I atlasCoords = _map.GetCellAtlasCoords(cellPos);
 
-		return GetTileAtAtlasCoords(cellPos);
+		return GetTileAtAtlasCoords(atlasCoords);
 	}
 
 	public TileDefinition GetTileAtAtlasCoords(Vector2I atlasCoords)
 	{
+		GD.Print($"{nameof(GetTileAtAtlasCoords)}, input: {atlasCoords}");
+
 		if (atlasTiles.ContainsKey(atlasCoords))
 		{
 			var match = atlasTiles[atlasCoords];
 			match.AtlasCoordinates = atlasCoords;
 			return match;
 		}
+		GD.Print("no match");
 		return new TileDefinition(); //return empty since there is no tile info availablew
 	}
 

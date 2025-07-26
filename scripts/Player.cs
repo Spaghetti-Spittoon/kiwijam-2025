@@ -3,6 +3,7 @@ using System;
 
 public partial class Player : Area2D
 {
+	public static Player Instance;
 	MapHandler map;
 
 	[Signal]
@@ -14,7 +15,6 @@ public partial class Player : Area2D
 	public Vector2 ScreenSize;
 	public Vector2I Direction = Vector2I.Right;
 
-
 	public void Start(Vector2 position)
 	{
 		Position = position;
@@ -24,6 +24,7 @@ public partial class Player : Area2D
 
 	public override void _Ready()
 	{
+		Instance = this;
 		ScreenSize = GetViewportRect().Size;
 		var parent = GetParent();
 		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");

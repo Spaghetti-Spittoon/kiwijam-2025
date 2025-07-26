@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Kiwijam2025"
-run/main_scene="uid://bopa0xia4ehi1"
+run/main_scene="uid://d24ejwlug3kla"
 config/features=PackedStringArray("4.4", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -23,7 +23,6 @@ SignalBus="*res://scripts/SignalBus.cs"
 
 window/size/viewport_width=1366
 window/size/viewport_height=768
-window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [dotnet]

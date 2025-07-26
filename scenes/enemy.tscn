@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://xd5a2bppy8tu"]
+
+[ext_resource type="Script" uid="uid://niaqiqu1g5my" path="res://scripts/EnemyHandler.cs" id="1_g5f4b"]
+[ext_resource type="Texture2D" uid="uid://df38h4k8r61po" path="res://assets/tex_tempenemy.png" id="2_5wlsd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yfb0i"]
+size = Vector2(50.5, 48.5)
+
+[node name="Enemy" type="Area2D"]
+script = ExtResource("1_g5f4b")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+texture = ExtResource("2_5wlsd")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.25, -0.25)
+shape = SubResource("RectangleShape2D_yfb0i")

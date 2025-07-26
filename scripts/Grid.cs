@@ -4,42 +4,116 @@ using System.Numerics;
 
 public partial class Grid : Node
 {
-    MapHandler mapHandler;
-    Vector2I topLeftCell = new Vector2I(5, 0);
-    Vector2I topRightCell = new Vector2I(8, 0);
     Vector2I leftTopCell = new Vector2I(2, 3);
-    Vector2I leftBotCell = new Vector2I(2, 6);
+    Vector2I leftTop2Cell = new Vector2I(2, 4);
+
+    Vector2I topLeftCell = new Vector2I(5, 0);
+    Vector2I topLeft2Cell = new Vector2I(6, 0);
+
+    Vector2I topRightCell = new Vector2I(8, 0);
+    Vector2I topRight2Cell = new Vector2I(7, 0);
+
     Vector2I rightTopCell = new Vector2I(11, 3);
+    Vector2I rightTop2Cell = new Vector2I(11, 4);
+
     Vector2I rightBotCell = new Vector2I(11, 6);
-    Vector2I botLeftCell = new Vector2I(5, 9);
+    Vector2I rightBot2Cell = new Vector2I(11, 5);
+
     Vector2I botRightCell = new Vector2I(8, 9);
+    Vector2I botRight2Cell = new Vector2I(7, 9);
 
-    Vector2I topTileId = new Vector2I(4, 0);
-    Vector2I leftTileId = new Vector2I();
-    Vector2I rightTileId = new Vector2I();
-    Vector2I botTileId = new Vector2I(4, 0);
+    Vector2I botLeftCell = new Vector2I(5, 9);
+    Vector2I botLeft2Cell = new Vector2I(6, 9);
 
-    Vector2I topLeftTileId = new Vector2I(0, 0);
-    Vector2I topRightTileId = new Vector2I(1, 0);
-    Vector2I botLeftTileId = new Vector2I(0, 1);
-    Vector2I botRightTileId = new Vector2I(1, 1);
+    Vector2I leftBotCell = new Vector2I(2, 6);
+    Vector2I leftBot2Cell = new Vector2I(2, 5);
 
-
-    public void AddStartingLevel(TileMapLayer map)
+    public void ExpandOneLevel(TileMapLayer mapLayer)
     {
-        mapHandler = new MapHandler(map);
-    }
+        //get atlas coordinates
+        var helper = new MapHandler(mapLayer);
 
-    public void ExpandOneLevel(int x, int y)
-    {
-        //expand the grid with empty cells
+        var leftTop1Info = helper.GetTileInfo(leftTopCell);
+        var leftTop2Info = helper.GetTileInfo(leftTop2Cell);
+        var topLeft1tInfo = helper.GetTileInfo(topLeftCell);
+        var topLeft2Info = helper.GetTileInfo(topLeft2Cell);
 
-        //iterate through all the empty cells
+        var topRight1Info = helper.GetTileInfo(topRightCell);
+        var topRight2Info = helper.GetTileInfo(topRight2Cell);
+        var rightTop1Info = helper.GetTileInfo(rightTopCell);
+        var rightTop2Info = helper.GetTileInfo(rightTop2Cell);
 
-        //detect the cells adjacent to the current cell
+        var rightBot1Info = helper.GetTileInfo(rightBotCell);
+        var rightBot2Info = helper.GetTileInfo(rightBot2Cell);
+        var botRight1Info = helper.GetTileInfo(botRightCell);
+        var botRight2Info = helper.GetTileInfo(botRight2Cell);
 
-        //determine which tile the current should be
+        var botLeft1Info = helper.GetTileInfo(botLeftCell);
+        var botLeft2Info = helper.GetTileInfo(botLeftCell);
+        var leftBot1Info = helper.GetTileInfo(leftBotCell);
+        var leftBot2Info = helper.GetTileInfo(leftBot2Cell);
 
-        //determine what the adjacent tiles should be
+        //expand top left quadrant
+        var newLeftTop1 = new Vector2I(leftTopCell.X - 1, leftTopCell.Y); //translate lefttop leftware
+        var newLeftTop2 = new Vector2I(newLeftTop1.X, newLeftTop1.Y + 1); //go adjacent down
+        var newTopLeft1 = new Vector2I(topLeftCell.X, topLeftCell.Y - 1); //translate topleft upward
+        var newTopLeft2 = new Vector2I(newTopLeft1.X + 1, newTopLeft1.Y); //go adjacent right
+
+        //expand top right quadrant
+        var newTopRight1 = new Vector2I(topRightCell.X, topRightCell.Y - 1); //translate topright upward
+        var newTopRight2 = new Vector2I(newTopRight1.X - 1, newTopRight1.Y); //go adjacent left
+        var newRightTop1 = new Vector2I(rightTopCell.X + 1, topRightCell.Y); //translate righttop leftware
+        var newRightTop2 = new Vector2I(newRightTop1.X, newRightTop1.Y + 1); //go adjacent down
+
+        //expand bot left quadrant
+        var newRightBot1 = new Vector2I(rightBotCell.X, rightBotCell.Y - 1); //translate rightbot upward
+        var newRightBot2 = new Vector2I(newRightBot1.X, newRightBot1.Y - 1); //go adjacent up
+        var newBotRight1 = new Vector2I(botRightCell.X - 1, botRightCell.Y); //translate botright leftware
+        var newBotRight2 = new Vector2I(newBotRight1.X - 1, newBotRight1.Y); //go adjacent left
+
+        // expand bot right quadrant
+        var newBotLeft1 = new Vector2I(botLeftCell.X, botLeftCell.Y - 1); //translate botleft upward
+        var newBotLeft2 = new Vector2I(newBotLeft1.X + 1, newBotLeft1.Y); //go adjacent right
+        var newLeftBot1 = new Vector2I(leftBotCell.X - 1, leftBotCell.Y); //translate leftbot leftware
+        var newLeftBot2 = new Vector2I(newLeftBot1.X, newLeftBot1.Y - 1); //go adjacent up
+
+        //expand all straight side tiles
+        mapLayer.SetCell(newLeftTop1, 1, leftTop1Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftTop2, 1, leftTop2Info.AtlasCoordinates);
+        mapLayer.SetCell(newTopLeft1, 1, topLeft1tInfo.AtlasCoordinates);
+        mapLayer.SetCell(newTopLeft2, 1, topLeft2Info.AtlasCoordinates);
+        
+        mapLayer.SetCell(newTopRight1, 1, topRight1Info.AtlasCoordinates);
+        mapLayer.SetCell(newTopRight2, 1, topRight2Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightTop1, 1, rightTop1Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightTop2, 1, rightTop2Info.AtlasCoordinates);
+
+        mapLayer.SetCell(newRightBot1, 1, rightBot1Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightBot2, 1, rightBot2Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotRight1, 1, botRight1Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotRight2, 1, botRight2Info.AtlasCoordinates);
+
+        mapLayer.SetCell(newBotLeft1, 1, botLeft1Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotLeft2, 1, botLeft2Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftBot1, 1, leftBot1Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftBot2, 1, leftBot2Info.AtlasCoordinates);
+
+        //expand diagonal side top left
+
+        //expand diagonal side top right
+
+        //expand diagonal side bot right
+
+        //expand diagonal side bot left
+
+        //assign expanded references as coin state  
+        leftTopCell = newLeftTop1;
+        topLeftCell = newTopLeft1;
+        topRightCell = newTopRight1;
+        rightTopCell = newRightTop1;
+        rightBotCell = newRightBot1;
+        botRightCell = newBotRight1;
+        botLeftCell = newBotLeft1;
+        leftBotCell = newLeftBot1;
     }
 }

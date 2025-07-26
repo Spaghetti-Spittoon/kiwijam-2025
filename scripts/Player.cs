@@ -41,6 +41,7 @@ public partial class Player : Area2D
 
 		if (map.HasPassedHalfTile(oldPos, Position, Direction) || Direction == Vector2.Zero)
 		{
+			Position = map.SnapToHalfTile(Position);
 			var tile = map.GetTileInfo(Position);
 
 			if (Input.IsActionPressed("move_up"))

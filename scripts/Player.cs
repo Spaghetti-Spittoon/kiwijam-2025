@@ -3,6 +3,8 @@ using System;
 
 public partial class Player : Area2D
 {
+	MapHandler map;
+
 	[Signal]
 	public delegate void HitEventHandler();
 
@@ -22,6 +24,9 @@ public partial class Player : Area2D
 	public override void _Ready()
 	{
 		ScreenSize = GetViewportRect().Size;
+		var parent = GetParent();
+		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");
+		map = new MapHandler(layer);
 	}
 
 	public override void _Process(double delta)
@@ -30,9 +35,9 @@ public partial class Player : Area2D
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
 
-		if (MapHandler.HasPassedTileCenter(oldPos, Position, Direction) || Direction == Vector2.Zero)
+		if (map.HasPassedTileCenter(oldPos, Position, Direction) || Direction == Vector2.Zero)
 		{
-			var directions = MapHandler.Instance.GetDirectionsAtNodeCenter(Position);
+			var directions = map.Instance.GetDirectionsAtNodeCenter(Position);
 
 			if (Input.IsActionPressed("move_up"))
 			{

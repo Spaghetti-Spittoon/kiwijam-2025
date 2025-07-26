@@ -2,21 +2,19 @@ using Godot;
 using Godot.Collections;
 using System.Collections.Generic;
 
-public partial class MapHandler : Node
+public class MapHandler
 {
-	[Export]
-	public TileMapLayer TileMap;
-
 	public const int GridSize = 100;
 	public const int HalfGridSize = GridSize / 2;
 
-	public static MapHandler Instance;
+	public MapHandler Instance;
 	public List<TileDefinition> TileDefinitions = new List<TileDefinition>();
+	TileMapLayer _map;
 
-	public static int PixelToTile(float pos) => Mathf.FloorToInt(pos / GridSize);
-	public static int PixelInTile(float pos) => Mathf.FloorToInt(pos % GridSize);
+	public int PixelToTile(float pos) => Mathf.FloorToInt(pos / GridSize);
+	public int PixelInTile(float pos) => Mathf.FloorToInt(pos % GridSize);
 
-	public override void _Ready()
+	public MapHandler(TileMapLayer inputMap)
 	{
 		Instance = this;
 		TileDefinitions.Add(new TileDefinition(true, true, true, true, false, false));
@@ -29,6 +27,8 @@ public partial class MapHandler : Node
 		TileDefinitions.Add(new TileDefinition(false, false, true, true, false, false));
 		TileDefinitions.Add(new TileDefinition(false, false, false, true, true, true));
 		TileDefinitions.Add(new TileDefinition(false, true, false, false, true, false));
+
+		_map = inputMap;
 	}
 
 	public Array<Vector2I> GetDirectionsAtNodeCenter(Vector2 position)
@@ -38,7 +38,7 @@ public partial class MapHandler : Node
 
 	public Array<Vector2I> GetDirectionsAtNodeCenter(int x, int y)
 	{
-		var atlasPos = TileMap.GetCellAtlasCoords(new Vector2I(x, y));
+		var atlasPos = _map.GetCellAtlasCoords(new Vector2I(x, y));
 		var id = atlasPos.X + (atlasPos.Y * 5);
 
 		if (id < 0)
@@ -57,7 +57,7 @@ public partial class MapHandler : Node
 		return new Array<Vector2I>();
 	}
 
-	public static bool HasPassedTileCenter(Vector2 oldPosition, Vector2 newPosition, Vector2 direction)
+	public bool HasPassedTileCenter(Vector2 oldPosition, Vector2 newPosition, Vector2 direction)
 	{
 		if (PixelToTile(oldPosition.X) != PixelToTile(newPosition.X))
 		{
@@ -106,38 +106,5 @@ public partial class MapHandler : Node
 		}
 
 		return false;
-	}
-}
-
-public class TileDefinition
-{
-	public Array<Vector2I> Directions = new Array<Vector2I>();
-
-	public TileDefinition(bool topRight, bool right, bool bottomRight, bool bottomLeft, bool left, bool topLeft)
-	{
-		if (topRight)
-		{
-			Directions.Add(Vector2I.Right + Vector2I.Up);
-		}
-		if (right)
-		{
-			Directions.Add(Vector2I.Right);
-		}
-		if (bottomRight)
-		{
-			Directions.Add(Vector2I.Right + Vector2I.Down);
-		}
-		if (topLeft)
-		{
-			Directions.Add(Vector2I.Left + Vector2I.Up);
-		}
-		if (left)
-		{
-			Directions.Add(Vector2I.Left);
-		}
-		if (bottomLeft)
-		{
-			Directions.Add(Vector2I.Left + Vector2I.Down);
-		}
 	}
 }

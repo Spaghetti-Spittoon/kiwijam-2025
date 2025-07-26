@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public partial class EnemyHandler : Area2D
 {
+	MapHandler map;
+
 	//Temporarily using constants
 	public const int GridSize = 100;
 	public const int HalfGridSize = 50;
@@ -12,15 +14,15 @@ public partial class EnemyHandler : Area2D
 	public const int MaxTileX = 5;
 	public const int MaxTileY = 5;
 
-	[Export]
-	public TileMapLayer Map;
-
-	public int XTile => MapHandler.PixelToTile(Position.X);
-	public int YTile => MapHandler.PixelToTile(Position.Y);
+	public int XTile => map.PixelToTile(Position.X);
+	public int YTile => map.PixelToTile(Position.Y);
 	public Vector2 Direction = Vector2.Right;
 
 	public override void _Ready()
 	{
+		var parent = GetParent();
+		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");
+		map = new MapHandler(layer);
 		PickDirection();
 	}
 
@@ -29,7 +31,7 @@ public partial class EnemyHandler : Area2D
 		var oldPosition = Position;
 		Position += Direction * (float)delta * MoveSpeed;
 
-		if (MapHandler.HasPassedTileCenter(oldPosition, Position, Direction))
+		if (map.HasPassedTileCenter(oldPosition, Position, Direction))
 		{
 			PickDirection();
 		}
@@ -39,7 +41,7 @@ public partial class EnemyHandler : Area2D
 	private void PickDirection()
 	{
 		CenterInTile();
-		Direction = MapHandler.Instance.GetDirectionsAtNodeCenter(Position).PickRandom();
+		Direction = map.Instance.GetDirectionsAtNodeCenter(Position).PickRandom();
 	}
 
 	private void CenterInTile()

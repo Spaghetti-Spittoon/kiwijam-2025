@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=4 uid="uid://bopa0xia4ehi1"]
+[gd_scene load_steps=8 format=4 uid="uid://bopa0xia4ehi1"]
 
 [ext_resource type="Script" uid="uid://ckopa6xxeaib0" path="res://scripts/Level.cs" id="1_6vs76"]
-[ext_resource type="PackedScene" uid="uid://xd5a2bppy8tu" path="res://scenes/enemy.tscn" id="1_k5jlv"]
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_k5jlv"]
 [ext_resource type="Texture2D" uid="uid://dxxgf2mt0m2tl" path="res://assets/gridtiles/tiles.png" id="1_uhqny"]
-[ext_resource type="PackedScene" path="res://scenes/phone.tscn" id="2_k5jlv"]
-[ext_resource type="Script" uid="uid://d2lbjtl0s01ew" path="res://scripts/MapHandler.cs" id="2_qifjx"]
-[ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
+[ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
+[ext_resource type="PackedScene" uid="uid://eh0bjefcj7gu" path="res://scenes/player.tscn" id="5_dke22"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uhqny"]
 texture = ExtResource("1_uhqny")
@@ -27,10 +26,6 @@ sources/1 = SubResource("TileSetAtlasSource_uhqny")
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_6vs76")
-
-[node name="TileHandler" type="Node" parent="." node_paths=PackedStringArray("TileMap")]
-script = ExtResource("2_qifjx")
-TileMap = NodePath("../TileMapLayer")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAAFAAAAAQAAAAAAAAAGAAAAAQAEAAAAAAAEAAEAAQAAAAAAAAADAAIAAQAAAAAAAAACAAMAAQAAAAAAAAAHAAAAAQAEAAAAAAACAAYAAQAAAAEAAAADAAcAAQAAAAEAAAAEAAgAAQAAAAEAAAAFAAkAAQAAAAEAAAAIAAkAAQABAAEAAAAJAAgAAQABAAEAAAAKAAcAAQABAAEAAAALAAYAAQABAAEAAAAFAAEAAQAEAAAAAAAFAAIAAQAEAAAAAAAFAAMAAQAEAAAAAAAFAAQAAQAEAAAAAAAFAAUAAQAEAAAAAAAFAAYAAQAEAAAAAAAFAAcAAQAEAAAAAAAGAAEAAQAEAAAAAAAGAAIAAQAEAAAAAAAGAAMAAQAEAAAAAAAGAAQAAQAEAAAAAAAGAAUAAQAEAAAAAAAGAAYAAQAEAAAAAAAGAAcAAQAEAAAAAAAHAAEAAQAEAAAAAAAHAAIAAQAEAAAAAAAHAAMAAQAEAAAAAAAHAAQAAQAEAAAAAAAHAAUAAQAEAAAAAAAHAAYAAQAEAAAAAAAHAAcAAQAEAAAAAAAIAAEAAQAEAAAAAAAIAAIAAQAEAAAAAAAIAAMAAQAEAAAAAAAIAAQAAQAEAAAAAAAIAAUAAQAEAAAAAAAIAAYAAQAEAAAAAAAIAAcAAQAEAAAAAAAJAAIAAQAEAAAAAAAJAAMAAQAEAAAAAAAJAAQAAQAEAAAAAAAJAAUAAQAEAAAAAAAJAAYAAQAEAAAAAAAJAAcAAQAEAAAAAAAEAAIAAQAEAAAAAAAEAAMAAQAEAAAAAAAEAAQAAQAEAAAAAAAEAAUAAQAEAAAAAAAEAAYAAQAEAAAAAAAEAAcAAQAEAAAAAAADAAMAAQAEAAAAAAADAAQAAQAEAAAAAAADAAUAAQAEAAAAAAADAAYAAQAEAAAAAAAFAAgAAQAEAAAAAAAGAAgAAQAEAAAAAAAHAAgAAQAEAAAAAAAIAAgAAQAEAAAAAAAKAAYAAQAEAAAAAAAKAAUAAQAEAAAAAAAKAAQAAQAEAAAAAAAKAAMAAQAEAAAAAAAIAAAAAQABAAAAAAAJAAEAAQABAAAAAAAKAAIAAQABAAAAAAALAAMAAQABAAAAAAAGAAkAAQAEAAAAAAAHAAkAAQAEAAAAAAACAAQAAQAAAAEAAAACAAUAAQAAAAAAAAALAAUAAQABAAAAAAALAAQAAQABAAEAAAA=")

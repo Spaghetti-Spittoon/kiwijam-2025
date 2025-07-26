@@ -13,6 +13,7 @@ public partial class Level : Node2D
 		mapLayer = GetNode<TileMapLayer>("TileMapLayer");
 		bus = GetNode<SignalBus>("/root/SignalBus");
 		button = GetNode<Button>("TestIncreaseButton");
+		grid = GetNode<Grid>("/root/Grid");
 		button.ButtonUp += OnLevelExpanded;
 		bus.LevelExpanded += OnLevelExpanded;
 	}

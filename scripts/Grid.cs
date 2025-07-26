@@ -82,7 +82,7 @@ public partial class Grid : Node
         mapLayer.SetCell(newLeftTop2, 1, leftTop2Info.AtlasCoordinates);
         mapLayer.SetCell(newTopLeft1, 1, topLeft1tInfo.AtlasCoordinates);
         mapLayer.SetCell(newTopLeft2, 1, topLeft2Info.AtlasCoordinates);
-        
+
         mapLayer.SetCell(newTopRight1, 1, topRight1Info.AtlasCoordinates);
         mapLayer.SetCell(newTopRight2, 1, topRight2Info.AtlasCoordinates);
         mapLayer.SetCell(newRightTop1, 1, rightTop1Info.AtlasCoordinates);
@@ -99,7 +99,7 @@ public partial class Grid : Node
         mapLayer.SetCell(newLeftBot2, 1, leftBot2Info.AtlasCoordinates);
 
         //expand diagonal side top left
-        
+
 
         //expand diagonal side top right
 
@@ -109,12 +109,27 @@ public partial class Grid : Node
 
         //assign expanded references as coin state  
         leftTopCell = newLeftTop1;
+        leftTop2Cell = newLeftTop2;
+
         topLeftCell = newTopLeft1;
+        topLeft2Cell = newTopLeft2;
+
         topRightCell = newTopRight1;
+        topRight2Cell = newTopRight2;
+
         rightTopCell = newRightTop1;
+        rightTop2Cell = newRightTop2;
+
         rightBotCell = newRightBot1;
+        rightBot2Cell = newRightBot2;
+
         botRightCell = newBotRight1;
+        botRight2Cell = newBotRight2;
+
         botLeftCell = newBotLeft1;
+        botLeft2Cell = newBotLeft2;
+
         leftBotCell = newLeftBot1;
+        leftBot2Cell = newLeftBot2;
     }
 }

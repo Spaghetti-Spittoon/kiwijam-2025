@@ -14,7 +14,7 @@ public partial class Player : Area2D
 	public int Speed { get; set; } = 400;
 
 	public Vector2 ScreenSize;
-	public Vector2I Direction = Vector2I.Right;
+	public Vector2 Direction = Vector2.Right;
 
 	private TileMapLayer tileMapLayer;
 
@@ -33,19 +33,20 @@ public partial class Player : Area2D
 		tileMapLayer = parent.GetNode<TileMapLayer>("TileMapLayer");
 		map = new MapHandler(tileMapLayer);
 		SetCameraTimeMapLayer();
+		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		animatedSprite2D.Play();
 	}
 
 	public override void _Process(double delta)
 	{
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
-		var HasPassedHalfTile = map.HasPassedHalfTile(oldPos, Position, Direction);
-		var shouldModifyDirection = HasPassedHalfTile || Direction == Vector2.Zero;
+		var isCentered = map.IsCentered(oldPos);
 		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
 
-		if (shouldModifyDirection)
+		if (isCentered)
 		{
-			Position = map.SnapToHalfTile(Position);
+			var currentTilePos = map.SnapToHalfTile(Position);
 			var tile = map.GetTileInfo(Position);
 			var enumType = tile.TileType.GetType();
 			var enumName = Enum.GetName(enumType, tile.TileType);
@@ -72,11 +73,14 @@ public partial class Player : Area2D
 			{
 				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Up))
 				{
-					Direction = Vector2I.Right + Vector2I.Up;
+					var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y - 100);
+					Direction = (destinationTilePos - Position).Normalized();
+					GD.Print($"player, move up right direction: {Direction}");
 				}
 				if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Up))
 				{
 					Direction = Vector2I.Left + Vector2I.Up;
+					GD.Print($"player, move up left direction: {Direction}");
 				}
 			}
 			else if (Input.IsActionPressed("move_down"))
@@ -84,10 +88,12 @@ public partial class Player : Area2D
 				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Down))
 				{
 					Direction = Vector2I.Right + Vector2I.Down;
+					GD.Print($"player, direction: {Direction}");
 				}
 				if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Down))
 				{
 					Direction = Vector2I.Left + Vector2I.Down;
+					GD.Print($"player, direction: {Direction}");
 				}
 			}
 			else
@@ -95,38 +101,39 @@ public partial class Player : Area2D
 				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
 				{
 					Direction = Vector2I.Right;
+					GD.Print($"player, direction: {Direction}");
 				}
 
-				if (Input.IsActionPressed("move_left"))
+				else if (Input.IsActionPressed("move_left"))
 				{
 					if (tile.Directions.Contains(Vector2I.Left))
 					{
 						Direction = Vector2I.Left;
+						GD.Print($"player, direction: {Direction}");
 					}
 					else
 					{
 						GD.Print("Cannot move left at " + map.PixelToHalfTile(Position.X) + ":" + map.PixelToHalfTile(Position.Y));
 					}
 				}
+
+				else
+				{
+					GD.Print($"automatically choosing direction");
+
+					if (tile.Directions.Contains(Vector2I.Right))
+					{
+						GD.Print("automatically moved right");
+						Direction = Vector2I.Right;
+					}
+
+					else if(tile.Directions.Contains(Vector2I.Left))
+					{
+						GD.Print("automatically moved left");
+						Direction = Vector2I.Left;
+					}
+				}
 			}
-
-			//Stop if we're at a dead end
-			if (tile.Directions.Contains(Direction) == false)
-			{
-				Direction = Vector2I.Zero;
-			}
-
-		}
-
-		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-
-		if (Direction.Length() > 0)
-		{
-			animatedSprite2D.Play();
-		}
-		else
-		{
-			animatedSprite2D.Stop();
 		}
 	}
 

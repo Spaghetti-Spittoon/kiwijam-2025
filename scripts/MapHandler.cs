@@ -74,30 +74,16 @@ public class MapHandler
 		return new TileDefinition(); //return empty since there is no tile info availablew
 	}
 
-	public bool HasPassedHalfTile(Vector2 oldPos, Vector2 newPos, Vector2I Direction)
+	public bool IsCentered(Vector2 oldPos)
 	{
 		//Check that we weren't previously standing on the boundary
-		var oldHalf = SnapToHalfTile(oldPos);
-		if (oldHalf.X == oldPos.X && oldHalf.Y == oldPos.Y)
-		{
-			return false;
-		}
+		var center = SnapToHalfTile(oldPos); //assume this is the center
+		var crossedCenterX = Math.Abs(center.X - oldPos.X) < 50;
+		var crossedCenterY = Math.Abs(center.Y - oldPos.Y) < 50;
 
-		if (Direction.X > 0)
+		if (crossedCenterX && crossedCenterY)
 		{
-			if (PixelToHalfTile(newPos.X) > PixelToHalfTile(oldPos.X)) return true;
-		}
-		if (Direction.X < 0)
-		{
-			if (PixelToHalfTile(newPos.X) < PixelToHalfTile(oldPos.X)) return true;
-		}
-		if (Direction.Y > 0)
-		{
-			if (PixelToHalfTile(newPos.Y) > PixelToHalfTile(oldPos.Y)) return true;
-		}
-		if (Direction.Y < 0)
-		{
-			if (PixelToHalfTile(newPos.Y) < PixelToHalfTile(oldPos.Y)) return true;
+			return true;
 		}
 		return false;
 	}
@@ -116,9 +102,10 @@ public class MapHandler
 		return x1 != x2 || y1 != y2;
 	}
 
-	internal Vector2 SnapToHalfTile(Vector2 oldPos)
+
+	public Vector2I SnapToHalfTile(Vector2 oldPos)
 	{
-		var result = new Vector2();
+		var result = new Vector2I();
 		result.X = PixelToHalfTile(oldPos.X + HalfGridSize / 2) * HalfGridSize;
 		result.Y = PixelToHalfTile(oldPos.Y + HalfGridSize / 2) * HalfGridSize;
 		return result;

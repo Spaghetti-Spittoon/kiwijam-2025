@@ -42,7 +42,7 @@ public partial class Word : Area2D
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Player.Instance.Speed;
 
-		if (map.HasPassedHalfTile(oldPos, Position, Direction) || Direction == Vector2.Zero)
+		if (map.IsCentered(oldPos))
 		{
 			//We want to try and chase the player
 			Position = map.SnapToHalfTile(Position);

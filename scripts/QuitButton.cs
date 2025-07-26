@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class QuitButton : Button
+public partial class QuitButton : TextureButton
 {
 	public override void _Ready()
 	{

@@ -5,6 +5,7 @@ public partial class Level : Node2D
 {
 	TileMapLayer mapLayer;
 	SignalBus bus;
+	Grid grid;
 
 	public override void _Ready()
 	{
@@ -15,7 +16,8 @@ public partial class Level : Node2D
 
 	void OnLevelExpanded()
 	{
-		//Find the top level
+		Console.WriteLine(nameof(OnLevelExpanded));
+		grid.ExpandOneLevel(mapLayer);
 	}
 
 	TileSetSource GetNamedTile(string tileName) {

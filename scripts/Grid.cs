@@ -1,58 +1,34 @@
 using Godot;
-using Godot.Collections;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Numerics;
 
 public partial class Grid : Node
 {
     MapHandler mapHandler;
+    Vector2I topLeftCell = new Vector2I(5, 0);
+    Vector2I topRightCell = new Vector2I(8, 0);
+    Vector2I leftTopCell = new Vector2I(2, 3);
+    Vector2I leftBotCell = new Vector2I(2, 6);
+    Vector2I rightTopCell = new Vector2I(11, 3);
+    Vector2I rightBotCell = new Vector2I(11, 6);
+    Vector2I botLeftCell = new Vector2I(5, 9);
+    Vector2I botRightCell = new Vector2I(8, 9);
+
+    Vector2I topTileId = new Vector2I(4, 0);
+    Vector2I leftTileId = new Vector2I();
+    Vector2I rightTileId = new Vector2I();
+    Vector2I botTileId = new Vector2I(4, 0);
+
+    Vector2I topLeftTileId = new Vector2I(0, 0);
+    Vector2I topRightTileId = new Vector2I(1, 0);
+    Vector2I botLeftTileId = new Vector2I(0, 1);
+    Vector2I botRightTileId = new Vector2I(1, 1);
+
 
     public void AddStartingLevel(TileMapLayer map)
     {
         mapHandler = new MapHandler(map);
-        var allCells = map.GetUsedCells();
-
-        //iterate through all cells
-        for (int index = 0; index < allCells.Count; index++)
-        {
-            var currentCellCoord = allCells[index];
-
-            //create the tile defintion
-            var tile = mapHandler.GetTileInfo(currentCellCoord.X, currentCellCoord.Y);
-        }
     }
-
-
-    LinkedListNode<NullablePair> CreateNewColumn(TileDefinition newTile)
-    {
-        var newColumnItem = new LinkedList<TileDefinition>();
-        newColumnItem.AddFirst(newTile);
-
-        var newPair = new NullablePair
-        {
-            Key = newTile.AtlasCoordinates.X,
-            Value = newColumnItem
-        };
-        var newNode = new LinkedListNode<NullablePair>(newPair);
-        return newNode;
-    }
-
-    void TryInsertAsRow() {
-
-    }
-
-    // public int GetWidth()
-    // {
-    // }
-
-    // public int GetHeight()
-    // {
-    // }
-
-    // public TileSetSource GetTile(int x, int y)
-    // {
-    // }
 
     public void ExpandOneLevel(int x, int y)
     {
@@ -66,9 +42,4 @@ public partial class Grid : Node
 
         //determine what the adjacent tiles should be
     }
-}
-
-public class NullablePair {
-    public required int Key;
-    public required LinkedList<TileDefinition> Value;
 }

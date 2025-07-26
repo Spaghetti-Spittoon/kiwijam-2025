@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -28,7 +29,7 @@ public partial class Grid : Node
     Vector2I leftBotCell = new Vector2I(2, 6);
     Vector2I leftBot2Cell = new Vector2I(2, 5);
 
-    public void ExpandOneLevel(TileMapLayer mapLayer)
+    public void ExpandOneLevel(TileMapLayer mapLayer, int tilesetId)
     {
         //get atlas coordinates
         var helper = new MapHandler(mapLayer);
@@ -62,41 +63,41 @@ public partial class Grid : Node
         //expand top right quadrant
         var newTopRight1 = new Vector2I(topRightCell.X, topRightCell.Y - 1); //translate topright upward
         var newTopRight2 = new Vector2I(newTopRight1.X - 1, newTopRight1.Y); //go adjacent left
-        var newRightTop1 = new Vector2I(rightTopCell.X + 1, topRightCell.Y); //translate righttop leftware
+        var newRightTop1 = new Vector2I(rightTopCell.X + 1, rightTopCell.Y); //translate righttop leftware
         var newRightTop2 = new Vector2I(newRightTop1.X, newRightTop1.Y + 1); //go adjacent down
 
         //expand bot left quadrant
-        var newRightBot1 = new Vector2I(rightBotCell.X, rightBotCell.Y - 1); //translate rightbot upward
+        var newRightBot1 = new Vector2I(rightBotCell.X + 1, rightBotCell.Y); //translate rightbot upward
         var newRightBot2 = new Vector2I(newRightBot1.X, newRightBot1.Y - 1); //go adjacent up
-        var newBotRight1 = new Vector2I(botRightCell.X - 1, botRightCell.Y); //translate botright leftware
+        var newBotRight1 = new Vector2I(botRightCell.X, botRightCell.Y + 1); //translate botright leftware
         var newBotRight2 = new Vector2I(newBotRight1.X - 1, newBotRight1.Y); //go adjacent left
 
         // expand bot right quadrant
-        var newBotLeft1 = new Vector2I(botLeftCell.X, botLeftCell.Y - 1); //translate botleft upward
+        var newBotLeft1 = new Vector2I(botLeftCell.X, botLeftCell.Y + 1); //translate botleft upward
         var newBotLeft2 = new Vector2I(newBotLeft1.X + 1, newBotLeft1.Y); //go adjacent right
         var newLeftBot1 = new Vector2I(leftBotCell.X - 1, leftBotCell.Y); //translate leftbot leftware
         var newLeftBot2 = new Vector2I(newLeftBot1.X, newLeftBot1.Y - 1); //go adjacent up
 
         //expand all straight side tiles
-        mapLayer.SetCell(newLeftTop1, 1, leftTop1Info.AtlasCoordinates);
-        mapLayer.SetCell(newLeftTop2, 1, leftTop2Info.AtlasCoordinates);
-        mapLayer.SetCell(newTopLeft1, 1, topLeft1tInfo.AtlasCoordinates);
-        mapLayer.SetCell(newTopLeft2, 1, topLeft2Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftTop1, tilesetId, leftTop1Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftTop2, tilesetId, leftTop2Info.AtlasCoordinates);
+        mapLayer.SetCell(newTopLeft1, tilesetId, topLeft1tInfo.AtlasCoordinates);
+        mapLayer.SetCell(newTopLeft2, tilesetId, topLeft2Info.AtlasCoordinates);
 
-        mapLayer.SetCell(newTopRight1, 1, topRight1Info.AtlasCoordinates);
-        mapLayer.SetCell(newTopRight2, 1, topRight2Info.AtlasCoordinates);
-        mapLayer.SetCell(newRightTop1, 1, rightTop1Info.AtlasCoordinates);
-        mapLayer.SetCell(newRightTop2, 1, rightTop2Info.AtlasCoordinates);
+        mapLayer.SetCell(newTopRight1, tilesetId, topRight1Info.AtlasCoordinates);
+        mapLayer.SetCell(newTopRight2, tilesetId, topRight2Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightTop1, tilesetId, rightTop1Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightTop2, tilesetId, rightTop2Info.AtlasCoordinates);
 
-        mapLayer.SetCell(newRightBot1, 1, rightBot1Info.AtlasCoordinates);
-        mapLayer.SetCell(newRightBot2, 1, rightBot2Info.AtlasCoordinates);
-        mapLayer.SetCell(newBotRight1, 1, botRight1Info.AtlasCoordinates);
-        mapLayer.SetCell(newBotRight2, 1, botRight2Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightBot1, tilesetId, rightBot1Info.AtlasCoordinates);
+        mapLayer.SetCell(newRightBot2, tilesetId, rightBot2Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotRight1, tilesetId, botRight1Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotRight2, tilesetId, botRight2Info.AtlasCoordinates);
 
-        mapLayer.SetCell(newBotLeft1, 1, botLeft1Info.AtlasCoordinates);
-        mapLayer.SetCell(newBotLeft2, 1, botLeft2Info.AtlasCoordinates);
-        mapLayer.SetCell(newLeftBot1, 1, leftBot1Info.AtlasCoordinates);
-        mapLayer.SetCell(newLeftBot2, 1, leftBot2Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotLeft1, tilesetId, botLeft1Info.AtlasCoordinates);
+        mapLayer.SetCell(newBotLeft2, tilesetId, botLeft2Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftBot1, tilesetId, leftBot1Info.AtlasCoordinates);
+        mapLayer.SetCell(newLeftBot2, tilesetId, leftBot2Info.AtlasCoordinates);
 
         //expand diagonal side top left
 

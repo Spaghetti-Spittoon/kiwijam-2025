@@ -39,7 +39,7 @@ public partial class EnemyHandler : Area2D
 	private void PickDirection()
 	{
 		CenterInTile();
-		Direction = GetTileDirections().PickRandom();
+		Direction = MapHandler.Instance.GetDirectionsAtNodeCenter(Position).PickRandom();
 	}
 
 	private void CenterInTile()
@@ -47,25 +47,4 @@ public partial class EnemyHandler : Area2D
 		Position = new Vector2(XTile * GridSize + HalfGridSize, YTile * GridSize + HalfGridSize);
 	}
 
-	private Array<Vector2> GetTileDirections()
-	{
-		var result = new Array<Vector2>();
-		var tileSource = Map.GetCellSourceId(new Vector2I(XTile, YTile));
-
-		switch(tileSource)
-		{
-			case 0:
-				if(YTile > 0)
-				{
-					result.Add(Vector2.Up + Vector2.Right);
-				}
-				if (XTile > 0)
-				{
-					result.Add(Vector2.Down + Vector2.Left);
-				}
-				break;
-		}
-
-		return result;
-	}
 }

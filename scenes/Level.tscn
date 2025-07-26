@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=4 uid="uid://bopa0xia4ehi1"]
+[gd_scene load_steps=9 format=4 uid="uid://bopa0xia4ehi1"]
 
 [ext_resource type="Script" uid="uid://ckopa6xxeaib0" path="res://scripts/Level.cs" id="1_6vs76"]
+[ext_resource type="PackedScene" uid="uid://xd5a2bppy8tu" path="res://scenes/enemy.tscn" id="1_k5jlv"]
 [ext_resource type="Texture2D" uid="uid://dxxgf2mt0m2tl" path="res://assets/gridtiles/tiles.png" id="1_uhqny"]
 [ext_resource type="PackedScene" path="res://scenes/phone.tscn" id="2_k5jlv"]
 [ext_resource type="Script" uid="uid://d2lbjtl0s01ew" path="res://scripts/MapHandler.cs" id="2_qifjx"]
@@ -44,3 +45,6 @@ position = Vector2(976, 472)
 [node name="Player" parent="." instance=ExtResource("5_dke22")]
 position = Vector2(352, 248)
 Speed = 100
+
+[node name="Enemy" parent="." instance=ExtResource("1_k5jlv")]
+position = Vector2(696, 304)

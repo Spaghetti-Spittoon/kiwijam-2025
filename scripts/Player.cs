@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Text;
 
 public partial class Player : Area2D
 {
@@ -38,11 +39,34 @@ public partial class Player : Area2D
 	{
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
+		var HasPassedHalfTile = map.HasPassedHalfTile(oldPos, Position, Direction);
+		var shouldModifyDirection = HasPassedHalfTile || Direction == Vector2.Zero;
+		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
 
-		if (map.HasPassedHalfTile(oldPos, Position, Direction) || Direction == Vector2.Zero)
+		if (shouldModifyDirection)
 		{
 			Position = map.SnapToHalfTile(Position);
 			var tile = map.GetTileInfo(Position);
+			var enumType = tile.TileType.GetType();
+			var enumName = Enum.GetName(enumType, tile.TileType);
+			GD.Print($"{nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
+			var positionsString = new StringBuilder();
+
+			for (int i = 0; i < tile.Directions.Count; i++)
+			{
+				if (i == 0)
+				{
+					positionsString.Append("player: ");
+				}
+				var currentDirection = tile.Directions[i];
+				positionsString.Append($"{currentDirection}");
+
+				if (i == tile.Directions.Count - 1)
+				{
+					positionsString.AppendLine();
+				}
+			}
+			GD.Print(positionsString);
 
 			if (Input.IsActionPressed("move_up"))
 			{

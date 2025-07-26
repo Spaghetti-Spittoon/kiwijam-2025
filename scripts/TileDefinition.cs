@@ -29,17 +29,17 @@ public class TileDefinition
 		switch (inputType)
 		{
 			case TileTypes.SailTopLeft:
-				topLeft = true;
+				right = true;
 				topRight = true;
-				left = true;
+				bottomRight = true;
 				bottomLeft = true;
 				break;
 
 			case TileTypes.SailTopRight:
 				topLeft = true;
-				topRight = true;
-				right = true;
+				left = true;
 				bottomRight = true;
+				bottomLeft = true;
 				break;
 
 			case TileTypes.DownEnd:
@@ -61,15 +61,15 @@ public class TileDefinition
 
 			case TileTypes.SailBotLeft:
 				topLeft = true;
-				left = true;
-				bottomLeft = true;
+				topRight = true;
 				bottomRight = true;
+				right = true;
 				break;
 
 			case TileTypes.SailBotRight:
 				topRight = true;
-				right = true;
-				bottomRight = true;
+				left = true;
+				topLeft = true;
 				bottomLeft = true;
 				break;
 

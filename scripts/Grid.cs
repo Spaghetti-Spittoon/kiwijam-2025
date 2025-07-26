@@ -31,28 +31,45 @@ public partial class Grid : Node
 
     public void ExpandOneLevel(TileMapLayer mapLayer, int tilesetId)
     {
+        GD.Print($"{nameof(ExpandOneLevel)}");
         //get atlas coordinates
         var helper = new MapHandler(mapLayer);
 
         var leftTop1Info = helper.GetTileInfo(leftTopCell);
+        GD.Print($"lefttop atlas: {leftTop1Info.AtlasCoordinates}");
         var leftTop2Info = helper.GetTileInfo(leftTop2Cell);
-        var topLeft1tInfo = helper.GetTileInfo(topLeftCell);
+        GD.Print($"lefttop2 atlas: {leftTop2Info.AtlasCoordinates}");
+        var topLeft1Info = helper.GetTileInfo(topLeftCell);
+        GD.Print($"topLeft atlas: {topLeft1Info.AtlasCoordinates}");
         var topLeft2Info = helper.GetTileInfo(topLeft2Cell);
+        GD.Print($"topLeft2 atlas: {topLeft2Info.AtlasCoordinates}");
 
         var topRight1Info = helper.GetTileInfo(topRightCell);
+        GD.Print($"topRight atlas: {topRight1Info.AtlasCoordinates}");
         var topRight2Info = helper.GetTileInfo(topRight2Cell);
+        GD.Print($"topRight2 atlas: {topRight2Info.AtlasCoordinates}");
         var rightTop1Info = helper.GetTileInfo(rightTopCell);
+        GD.Print($"rightTop atlas: {rightTop1Info.AtlasCoordinates}");
         var rightTop2Info = helper.GetTileInfo(rightTop2Cell);
+        GD.Print($"rightTop2 atlas: {rightTop2Info.AtlasCoordinates}");
 
         var rightBot1Info = helper.GetTileInfo(rightBotCell);
+        GD.Print($"rightBot atlas: {rightBot1Info.AtlasCoordinates}");
         var rightBot2Info = helper.GetTileInfo(rightBot2Cell);
+        GD.Print($"rightBot2 atlas: {rightBot2Info.AtlasCoordinates}");
         var botRight1Info = helper.GetTileInfo(botRightCell);
+        GD.Print($"botRight atlas: {botRight1Info.AtlasCoordinates}");
         var botRight2Info = helper.GetTileInfo(botRight2Cell);
+        GD.Print($"botRight2 atlas: {botRight2Info.AtlasCoordinates}");
 
         var botLeft1Info = helper.GetTileInfo(botLeftCell);
+        GD.Print($"botLeft atlas: {botLeft1Info.AtlasCoordinates}");
         var botLeft2Info = helper.GetTileInfo(botLeftCell);
+        GD.Print($"botLeft2 atlas: {botLeft2Info.AtlasCoordinates}");
         var leftBot1Info = helper.GetTileInfo(leftBotCell);
+        GD.Print($"leftBot atlas: {leftBot1Info.AtlasCoordinates}");
         var leftBot2Info = helper.GetTileInfo(leftBot2Cell);
+        GD.Print($"leftBot2 atlas: {leftBot2Info.AtlasCoordinates}");
 
         //expand top left quadrant
         var newLeftTop1 = new Vector2I(leftTopCell.X - 1, leftTopCell.Y); //translate lefttop leftware
@@ -81,7 +98,7 @@ public partial class Grid : Node
         //expand all straight side tiles
         mapLayer.SetCell(newLeftTop1, tilesetId, leftTop1Info.AtlasCoordinates);
         mapLayer.SetCell(newLeftTop2, tilesetId, leftTop2Info.AtlasCoordinates);
-        mapLayer.SetCell(newTopLeft1, tilesetId, topLeft1tInfo.AtlasCoordinates);
+        mapLayer.SetCell(newTopLeft1, tilesetId, topLeft1Info.AtlasCoordinates);
         mapLayer.SetCell(newTopLeft2, tilesetId, topLeft2Info.AtlasCoordinates);
 
         mapLayer.SetCell(newTopRight1, tilesetId, topRight1Info.AtlasCoordinates);

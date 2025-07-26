@@ -10,7 +10,7 @@ public partial class QuitButton : TextureButton
 
 	void OnClick()
 	{
-		Console.WriteLine("Quit button clicked");
+		GD.Print("Quit button clicked");
 		var tree = this.GetTree();
 		tree.Quit();
 	}

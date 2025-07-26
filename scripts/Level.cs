@@ -20,7 +20,7 @@ public partial class Level : Node2D
 
 	void OnLevelExpanded()
 	{
-		Console.WriteLine(nameof(OnLevelExpanded));
+		GD.Print(nameof(OnLevelExpanded));
 		int sourceId = mapLayer.TileSet.GetSourceId(0);
 		grid.ExpandOneLevel(mapLayer, sourceId);
 	}

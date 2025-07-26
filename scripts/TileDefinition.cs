@@ -1,18 +1,102 @@
 
+using System.Dynamic;
+using System.Linq.Expressions;
 using Godot;
 using Godot.Collections;
 
 public class TileDefinition
 {
-	public bool NotPopulated { get; private set; } = true;
 	public Vector2I AtlasCoordinates { get; set; }
 
-	public Array<Vector2I> Directions = new Array<Vector2I>();
+	public Array<Vector2I> Directions { get; private set; } = new Array<Vector2I>();
+	public TileTypes TileType { get; private set; } = TileTypes.NoneGiven;
 
-	public TileDefinition(bool topRight = false, bool right = false, bool bottomRight = false, bool bottomLeft = false, bool left = false, bool topLeft = false)
+	public TileDefinition(TileTypes inputType = TileTypes.NoneGiven)
 	{
-		NotPopulated = false;
-		
+		TileType = inputType;
+
+		if (TileType == TileTypes.NoneGiven)
+		{
+			return; //don't populate the directions array
+		}
+		bool topLeft = false,
+			topRight = false,
+			left = false,
+			right = false,
+			bottomLeft = false,
+			bottomRight = false;
+
+		switch (inputType)
+		{
+			case TileTypes.SailTopLeft:
+				topLeft = true;
+				topRight = true;
+				left = true;
+				bottomLeft = true;
+				break;
+
+			case TileTypes.SailTopRight:
+				topLeft = true;
+				topRight = true;
+				right = true;
+				bottomRight = true;
+				break;
+
+			case TileTypes.DownEnd:
+				topLeft = true;
+				topRight = true;
+				break;
+
+			case TileTypes.LeftEnd:
+				topRight = true;
+				right = true;
+				bottomRight = true;
+				break;
+
+			case TileTypes.RightEnd:
+				topLeft = true;
+				left = true;
+				bottomRight = true;
+				break;
+
+			case TileTypes.SailBotLeft:
+				topLeft = true;
+				left = true;
+				bottomLeft = true;
+				bottomRight = true;
+				break;
+
+			case TileTypes.SailBotRight:
+				topRight = true;
+				right = true;
+				bottomRight = true;
+				bottomLeft = true;
+				break;
+
+			case TileTypes.UpEnd:
+				bottomLeft = true;
+				bottomRight = true;
+				break;
+
+			case TileTypes.Straight:
+				left = true;
+				right = true;
+				break;
+
+			case TileTypes.Middle:
+				topLeft = true;
+				topRight = true;
+				left = true;
+				right = true;
+				bottomLeft = true;
+				bottomRight = true;
+				break;
+
+			default:
+				GD.PrintErr($"unaccounted for tiletype: {inputType}");
+				return;
+		}
+
 		if (topRight)
 		{
 			Directions.Add(Vector2I.Right + Vector2I.Up);
@@ -38,4 +122,19 @@ public class TileDefinition
 			Directions.Add(Vector2I.Left + Vector2I.Down);
 		}
 	}
+}
+
+public enum TileTypes
+{
+	NoneGiven,
+	SailTopLeft,
+	SailTopRight,
+	DownEnd,
+	LeftEnd,
+	RightEnd,
+	SailBotLeft,
+	SailBotRight,
+	UpEnd,
+	Straight,
+	Middle
 }

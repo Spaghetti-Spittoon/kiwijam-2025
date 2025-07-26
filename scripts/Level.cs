@@ -6,11 +6,14 @@ public partial class Level : Node2D
 	TileMapLayer mapLayer;
 	SignalBus bus;
 	Grid grid;
+	Button button;
 
 	public override void _Ready()
 	{
 		mapLayer = GetNode<TileMapLayer>("TileMapLayer");
 		bus = GetNode<SignalBus>("/root/SignalBus");
+		button = GetNode<Button>("TestIncreaseButton");
+		button.ButtonUp += OnLevelExpanded;
 		bus.LevelExpanded += OnLevelExpanded;
 	}
 
@@ -20,7 +23,8 @@ public partial class Level : Node2D
 		grid.ExpandOneLevel(mapLayer);
 	}
 
-	TileSetSource GetNamedTile(string tileName) {
+	TileSetSource GetNamedTile(string tileName)
+	{
 		var tileset = mapLayer.TileSet;
 		var numTiles = tileset.GetSourceCount();
 

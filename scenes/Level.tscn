@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_k5jlv"]
 [ext_resource type="Texture2D" uid="uid://cg3kfchlv6ps5" path="res://assets/gridtiles/tileset.png" id="2_dke22"]
 [ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
-[ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
-[ext_resource type="PackedScene" uid="uid://dd2jqukc7yhej" path="res://scenes/word.tscn" id="6_dke22"]
+[ext_resource type="PackedScene" uid="uid://eh0bjefcj7gu" path="res://scenes/player.tscn" id="5_dke22"]
+[ext_resource type="PackedScene" path="res://scenes/word.tscn" id="6_dke22"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4qegb"]
 texture = ExtResource("2_dke22")
@@ -61,3 +61,10 @@ position = Vector2(760, 456)
 
 [node name="Word" parent="." instance=ExtResource("6_dke22")]
 position = Vector2(456, 248)
+
+[node name="TestIncreaseButton" type="Button" parent="."]
+offset_left = 632.0
+offset_top = 312.0
+offset_right = 784.0
+offset_bottom = 360.0
+text = "Increase Size"

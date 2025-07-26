@@ -99,6 +99,7 @@ public partial class Grid : Node
         mapLayer.SetCell(newLeftBot2, 1, leftBot2Info.AtlasCoordinates);
 
         //expand diagonal side top left
+        
 
         //expand diagonal side top right
 

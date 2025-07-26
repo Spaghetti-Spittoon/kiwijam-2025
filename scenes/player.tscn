@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://eh0bjefcj7gu"]
+[gd_scene load_steps=6 format=3 uid="uid://cddai83v88cgu"]
 
 [ext_resource type="Texture2D" uid="uid://dql7bpiwffaeb" path="res://assets/sparky_move1.png" id="1_g2els"]
 [ext_resource type="Script" uid="uid://ca617tpbrmov7" path="res://scripts/Player.cs" id="1_qhqgy"]

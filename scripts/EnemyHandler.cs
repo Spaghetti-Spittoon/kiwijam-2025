@@ -16,7 +16,7 @@ public partial class EnemyHandler : Area2D
 
 	public int XTile => map.PixelToTile(Position.X);
 	public int YTile => map.PixelToTile(Position.Y);
-	public Vector2 Direction = Vector2.Right;
+	public Vector2I Direction = Vector2I.Right;
 
 	public override void _Ready()
 	{
@@ -29,9 +29,9 @@ public partial class EnemyHandler : Area2D
 	public override void _Process(double delta)
 	{
 		var oldPosition = Position;
-		Position += Direction * (float)delta * MoveSpeed;
+		Position += (Vector2)Direction * (float)delta * MoveSpeed;
 
-		if (map.HasPassedTileCenter(oldPosition, Position, Direction))
+		if (map.HasPassedHalfTile(oldPosition, Position, Direction))
 		{
 			PickDirection();
 		}
@@ -40,8 +40,8 @@ public partial class EnemyHandler : Area2D
 
 	private void PickDirection()
 	{
-		CenterInTile();
-		Direction = map.Instance.GetDirectionsAtNodeCenter(Position).PickRandom();
+		Position = map.SnapToHalfTile(Position);
+		Direction = map.GetDirections(Position).PickRandom();
 	}
 
 	private void CenterInTile()

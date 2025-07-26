@@ -14,6 +14,7 @@ public partial class Player : Area2D
 	public Vector2 ScreenSize;
 	public Vector2I Direction = Vector2I.Right;
 
+
 	public void Start(Vector2 position)
 	{
 		Position = position;
@@ -31,13 +32,13 @@ public partial class Player : Area2D
 
 	public override void _Process(double delta)
 	{
-
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
 
-		if (map.HasPassedTileCenter(oldPos, Position, Direction) || Direction == Vector2.Zero)
+		if (map.HasPassedHalfTile(oldPos, Position, Direction) || Direction == Vector2.Zero)
 		{
-			var directions = map.Instance.GetDirectionsAtNodeCenter(Position);
+			Position = map.SnapToHalfTile(Position);
+			var directions = map.GetDirections(Position);
 
 			if (Input.IsActionPressed("move_up"))
 			{
@@ -67,9 +68,16 @@ public partial class Player : Area2D
 				{
 					Direction = Vector2I.Right;
 				}
-				if (Input.IsActionPressed("move_left") && directions.Contains(Vector2I.Left))
+				if (Input.IsActionPressed("move_left"))
 				{
-					Direction = Vector2I.Left;
+					if (directions.Contains(Vector2I.Left))
+					{
+						Direction = Vector2I.Left;
+					}
+					else
+					{
+						GD.Print("Cannot move left at " + map.PixelToHalfTile(Position.X) + ":" + map.PixelToHalfTile(Position.Y));
+					}
 				}
 			}
 

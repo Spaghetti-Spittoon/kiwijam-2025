@@ -20,15 +20,22 @@ public class MapHandler
 
 	public MapHandler(TileMapLayer inputMap)
 	{
-		TileDefinitions.Add(new TileDefinition(true, true, true, true, false, false));
-		TileDefinitions.Add(new TileDefinition(false, false, true, true, true, true));
-		TileDefinitions.Add(new TileDefinition(true, false, false, false, false, true));
+		//Each TileDefinition matches a tile in the TileMapLayer in order of the atlas.
+		TileDefinitions.Add(new TileDefinition(true, false, false, false, false, false));
+		TileDefinitions.Add(new TileDefinition(true, false, true, false, false, false));
 		TileDefinitions.Add(new TileDefinition(true, true, true, false, false, false));
-		TileDefinitions.Add(new TileDefinition(true, true, true, true, true, true));
-		TileDefinitions.Add(new TileDefinition(true, true, true, false, true, true));
-		TileDefinitions.Add(new TileDefinition(true, true, false, true, true, true));
-		TileDefinitions.Add(new TileDefinition(false, false, true, true, false, false));
+		TileDefinitions.Add(new TileDefinition(false, false, true, false, false, false));
+		TileDefinitions.Add(new TileDefinition(false, false, true, false, false, false));
 		TileDefinitions.Add(new TileDefinition(false, false, false, true, true, true));
+		TileDefinitions.Add(new TileDefinition(false, false, false, true, false, true));
+		TileDefinitions.Add(new TileDefinition(false, false, false, false, false, true));
+		TileDefinitions.Add(new TileDefinition(true, true, true, true, true, true));
+		TileDefinitions.Add(new TileDefinition(true, false, false, false, false, true));
+		TileDefinitions.Add(new TileDefinition(false, false, true, true, false, false));
+		TileDefinitions.Add(new TileDefinition(true, false, false, true, true, true));
+		TileDefinitions.Add(new TileDefinition(true, true, true, false, false, true));
+		TileDefinitions.Add(new TileDefinition(false, false, true, true, true, true));
+		TileDefinitions.Add(new TileDefinition(true, true, true, true, false, false));
 		TileDefinitions.Add(new TileDefinition(false, true, false, false, true, false));
 		_map = inputMap;
 	}
@@ -98,7 +105,7 @@ public class MapHandler
 	public TileDefinition GetTileInfo(int x, int y)
 	{
 		var atlasPos = _map.GetCellAtlasCoords(new Vector2I(x, y));
-		var id = atlasPos.X + (atlasPos.Y * 5);
+		var id = atlasPos.X + (atlasPos.Y * 8);
 
 		if (id < 0)
 		{

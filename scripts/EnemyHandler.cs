@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using System.Collections.Generic;
 
 
 public partial class EnemyHandler : Area2D
@@ -11,16 +12,16 @@ public partial class EnemyHandler : Area2D
 	public const int MaxTileX = 5;
 	public const int MaxTileY = 5;
 
-	public static int PixelToTile(float pos) => Mathf.FloorToInt(pos / GridSize);
-	public static int PixelInTile(float pos) => Mathf.FloorToInt(pos % GridSize);
+	[Export]
+	public TileMapLayer Map;
 
-	public int XTile => PixelToTile(Position.X);
-	public int YTile => PixelToTile(Position.Y);
+	public int XTile => MapHandler.PixelToTile(Position.X);
+	public int YTile => MapHandler.PixelToTile(Position.Y);
 	public Vector2 Direction = Vector2.Right;
 
 	public override void _Ready()
 	{
-		CenterInTile();
+		PickDirection();
 	}
 
 	public override void _Process(double delta)
@@ -28,63 +29,17 @@ public partial class EnemyHandler : Area2D
 		var oldPosition = Position;
 		Position += Direction * (float)delta * MoveSpeed;
 
-		if (HasPassedTileCenter(oldPosition, Position, Direction))
+		if (MapHandler.HasPassedTileCenter(oldPosition, Position, Direction))
 		{
-			CenterInTile();
-			Direction = PossibleDirections().PickRandom();
+			PickDirection();
 		}
 
 	}
 
-	private bool HasPassedTileCenter(Vector2 oldPosition, Vector2 newPosition, Vector2 direction)
+	private void PickDirection()
 	{
-		if (PixelToTile(oldPosition.X) != PixelToTile(Position.X))
-		{
-			//Different tiles
-			return false;
-		}
-
-		if (PixelToTile(oldPosition.Y) != PixelToTile(Position.Y))
-		{
-			//Different tiles
-			return false;
-		}
-
-		if (direction.X > 0)
-		{
-			//Moving right
-			if (PixelInTile(oldPosition.X) < HalfGridSize && PixelInTile(newPosition.X) >= HalfGridSize)
-			{
-				return true;
-			}
-		}
-		else if (Direction.X < 0)
-		{
-			//Moving left
-			if (PixelInTile(oldPosition.X) > HalfGridSize && PixelInTile(newPosition.X) <= HalfGridSize)
-			{
-				return true;
-			}
-		}
-
-		if (direction.Y > 0)
-		{
-			//Moving down
-			if (PixelInTile(oldPosition.Y) < HalfGridSize && PixelInTile(newPosition.Y) >= HalfGridSize)
-			{
-				return true;
-			}
-		}
-		else if (Direction.Y < 0)
-		{
-			//Moving up
-			if (PixelInTile(oldPosition.Y) > HalfGridSize && PixelInTile(newPosition.Y) <= HalfGridSize)
-			{
-				return true;
-			}
-		}
-
-		return false;
+		CenterInTile();
+		Direction = GetTileDirections().PickRandom();
 	}
 
 	private void CenterInTile()
@@ -92,39 +47,25 @@ public partial class EnemyHandler : Area2D
 		Position = new Vector2(XTile * GridSize + HalfGridSize, YTile * GridSize + HalfGridSize);
 	}
 
-	public Array<Vector2> PossibleDirections()
+	private Array<Vector2> GetTileDirections()
 	{
-		var list = new Array<Vector2>();
+		var result = new Array<Vector2>();
+		var tileSource = Map.GetCellSourceId(new Vector2I(XTile, YTile));
 
-		//Possible to move left
-		if (XTile > 0)
+		switch(tileSource)
 		{
-			list.Add(Vector2.Left);
-			if (YTile > 0)
-			{
-				list.Add(Vector2.Up + Vector2.Left);
-			}
-			if (YTile < MaxTileY)
-			{
-				list.Add(Vector2.Down + Vector2.Left);
-			}
+			case 0:
+				if(YTile > 0)
+				{
+					result.Add(Vector2.Up + Vector2.Right);
+				}
+				if (XTile > 0)
+				{
+					result.Add(Vector2.Down + Vector2.Left);
+				}
+				break;
 		}
 
-		if (XTile < MaxTileX)
-		{
-			list.Add(Vector2.Right);
-			if (YTile > 0)
-			{
-				list.Add(Vector2.Up + Vector2.Right);
-			}
-			if (YTile < MaxTileY)
-			{
-				list.Add(Vector2.Down + Vector2.Right);
-			}
-		}
-
-		return list;
+		return result;
 	}
-
-
 }

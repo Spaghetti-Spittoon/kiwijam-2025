@@ -3,6 +3,13 @@ using System;
 
 public partial class KillObstacle : Area2D
 {
+	private enum State
+	{
+		Safe,
+		Dangerous,
+		Finished,
+	}
+
 	[Export]
 	public AnimatedSprite2D animatedSprite;
 
@@ -13,14 +20,21 @@ public partial class KillObstacle : Area2D
 	public string DangerousAnimationName;
 
 	[Export]
+	public string FinishedAnimationName;
+
+	[Export]
 	public double SafeTime;
 
 	[Export]
 	public double DangerousTime;
 
-	private bool _isDangerous = false;
+	[Export]
+	public double FinishTime;
+
+	private State _state = State.Safe;
 	private double _remainingSafeTime = 0.0;
-	private double _remainingDangerLife = 0.0;
+	private double _remainingDangerTime = 0.0;
+	private double _remainingFinishTime = 0.0;
 
 	public void SetParameters(double safeTime, double dangerousTime)
 	{
@@ -31,7 +45,9 @@ public partial class KillObstacle : Area2D
 	public override void _Ready()
 	{
 		base._Ready();
-		if (animatedSprite is null || DangerousAnimationName == "")
+		if (animatedSprite is null
+		|| DangerousAnimationName == ""
+		|| FinishedAnimationName == "")
 		{
 			GD.PushError("KillObstacle not setup properly! (animatedSprite or DangerousAnimationName)");
 		}
@@ -42,8 +58,8 @@ public partial class KillObstacle : Area2D
 	{
 		GD.Print("KillObstacle becoming dangerous");
 		animatedSprite.Play(DangerousAnimationName);
-		_isDangerous = true;
-		_remainingDangerLife = DangerousTime;
+		_state = State.Dangerous;
+		_remainingDangerTime = DangerousTime;
 		foreach (var body in GetOverlappingAreas())
 		{
 			DealWithCollidedNode(body);
@@ -52,9 +68,9 @@ public partial class KillObstacle : Area2D
 
 	public void OnCollide(Node node)
 	{
-		if (!_isDangerous)
+		if (_state != State.Dangerous)
 		{
-			GD.Print("KillObstacle Collision but obstacle not dangerous yet");
+			GD.Print("KillObstacle Collision but obstacle not dangerous");
 			return;
 		}
 		DealWithCollidedNode(node);
@@ -65,9 +81,16 @@ public partial class KillObstacle : Area2D
 	{
 		if (node.IsInGroup("words"))
 		{
+			if (node is not Word)
+			{
+				GD.PushError("Obstacle collided with 'words' group node that wasn't a word");
+				return;
+			}
 			GD.Print("Word collision with KillObstacle");
-			node.QueueFree();
-			QueueFree();
+			_state = State.Finished;
+			_remainingFinishTime = FinishTime;
+			animatedSprite.Play(FinishedAnimationName);
+			(node as Word).Die();
 		}
 		else
 		{
@@ -77,22 +100,29 @@ public partial class KillObstacle : Area2D
 
 	public override void _Process(double delta)
 	{
-		if (!_isDangerous)
+		switch (_state)
 		{
-			_remainingSafeTime -= delta;
-			if (_remainingSafeTime <= 0.0)
-			{
-				BecomeDangerous();
-			}
-			return;
-		}
-
-		_remainingDangerLife -= delta;
-
-		if (_remainingDangerLife < 0.0)
-		{
-			GD.Print("KillObstacle expiring");
-			QueueFree();
+			case State.Safe:
+				_remainingSafeTime -= delta;
+				if (_remainingSafeTime < 0.0)
+					BecomeDangerous();
+				return;
+			case State.Dangerous:
+				_remainingDangerTime -= delta;
+				if (_remainingDangerTime < 0.0)
+				{
+					GD.Print("Obstacle expired");
+					QueueFree();
+				}
+				return;
+			case State.Finished:
+				_remainingFinishTime -= delta;
+				if (_remainingFinishTime <= 0.0)
+				{
+					GD.Print("Obstacle 'finished'");
+					QueueFree();
+				}
+				return;
 		}
 	}
 }

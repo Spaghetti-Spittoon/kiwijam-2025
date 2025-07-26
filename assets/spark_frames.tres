@@ -80,7 +80,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fymuv")
+}],
+"loop": true,
+"name": &"dangerous_sparks",
+"speed": 5.0
 }, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yiyqu")
 }, {
@@ -93,8 +98,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fafhr")
 }],
-"loop": true,
-"name": &"dangerous_sparks",
+"loop": false,
+"name": &"finished_sparks",
 "speed": 5.0
 }, {
 "frames": [{

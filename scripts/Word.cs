@@ -36,12 +36,9 @@ public partial class Word : Area2D
 		// OnTextResized();
 	}
 
-	public override void _ExitTree()
+	public void Die()
 	{
-		base._ExitTree();
-		EmitSignal(
-			SignalName.WordDestroyed,
-			this
-		);
-    }
+		EmitSignal(SignalName.WordDestroyed, this);
+		QueueFree();
+	}
 }

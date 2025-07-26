@@ -35,40 +35,40 @@ public partial class Grid : Node
         //get atlas coordinates
         var helper = new MapHandler(mapLayer);
 
-        var leftTop1Info = helper.GetTileInfo(leftTopCell);
+        var leftTop1Info = helper.GetTileAtAtlasCoords(leftTopCell);
         GD.Print($"lefttop atlas: {leftTop1Info.AtlasCoordinates}");
-        var leftTop2Info = helper.GetTileInfo(leftTop2Cell);
+        var leftTop2Info = helper.GetTileAtAtlasCoords(leftTop2Cell);
         GD.Print($"lefttop2 atlas: {leftTop2Info.AtlasCoordinates}");
-        var topLeft1Info = helper.GetTileInfo(topLeftCell);
+        var topLeft1Info = helper.GetTileAtAtlasCoords(topLeftCell);
         GD.Print($"topLeft atlas: {topLeft1Info.AtlasCoordinates}");
-        var topLeft2Info = helper.GetTileInfo(topLeft2Cell);
+        var topLeft2Info = helper.GetTileAtAtlasCoords(topLeft2Cell);
         GD.Print($"topLeft2 atlas: {topLeft2Info.AtlasCoordinates}");
 
-        var topRight1Info = helper.GetTileInfo(topRightCell);
+        var topRight1Info = helper.GetTileAtAtlasCoords(topRightCell);
         GD.Print($"topRight atlas: {topRight1Info.AtlasCoordinates}");
-        var topRight2Info = helper.GetTileInfo(topRight2Cell);
+        var topRight2Info = helper.GetTileAtAtlasCoords(topRight2Cell);
         GD.Print($"topRight2 atlas: {topRight2Info.AtlasCoordinates}");
-        var rightTop1Info = helper.GetTileInfo(rightTopCell);
+        var rightTop1Info = helper.GetTileAtAtlasCoords(rightTopCell);
         GD.Print($"rightTop atlas: {rightTop1Info.AtlasCoordinates}");
-        var rightTop2Info = helper.GetTileInfo(rightTop2Cell);
+        var rightTop2Info = helper.GetTileAtAtlasCoords(rightTop2Cell);
         GD.Print($"rightTop2 atlas: {rightTop2Info.AtlasCoordinates}");
 
-        var rightBot1Info = helper.GetTileInfo(rightBotCell);
+        var rightBot1Info = helper.GetTileAtAtlasCoords(rightBotCell);
         GD.Print($"rightBot atlas: {rightBot1Info.AtlasCoordinates}");
-        var rightBot2Info = helper.GetTileInfo(rightBot2Cell);
+        var rightBot2Info = helper.GetTileAtAtlasCoords(rightBot2Cell);
         GD.Print($"rightBot2 atlas: {rightBot2Info.AtlasCoordinates}");
-        var botRight1Info = helper.GetTileInfo(botRightCell);
+        var botRight1Info = helper.GetTileAtAtlasCoords(botRightCell);
         GD.Print($"botRight atlas: {botRight1Info.AtlasCoordinates}");
-        var botRight2Info = helper.GetTileInfo(botRight2Cell);
+        var botRight2Info = helper.GetTileAtAtlasCoords(botRight2Cell);
         GD.Print($"botRight2 atlas: {botRight2Info.AtlasCoordinates}");
 
-        var botLeft1Info = helper.GetTileInfo(botLeftCell);
+        var botLeft1Info = helper.GetTileAtAtlasCoords(botLeftCell);
         GD.Print($"botLeft atlas: {botLeft1Info.AtlasCoordinates}");
-        var botLeft2Info = helper.GetTileInfo(botLeftCell);
+        var botLeft2Info = helper.GetTileAtAtlasCoords(botLeftCell);
         GD.Print($"botLeft2 atlas: {botLeft2Info.AtlasCoordinates}");
-        var leftBot1Info = helper.GetTileInfo(leftBotCell);
+        var leftBot1Info = helper.GetTileAtAtlasCoords(leftBotCell);
         GD.Print($"leftBot atlas: {leftBot1Info.AtlasCoordinates}");
-        var leftBot2Info = helper.GetTileInfo(leftBot2Cell);
+        var leftBot2Info = helper.GetTileAtAtlasCoords(leftBot2Cell);
         GD.Print($"leftBot2 atlas: {leftBot2Info.AtlasCoordinates}");
 
         //expand top left quadrant

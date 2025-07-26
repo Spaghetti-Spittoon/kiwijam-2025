@@ -41,7 +41,13 @@ public partial class EnemyHandler : Area2D
 	private void PickDirection()
 	{
 		Position = map.SnapToHalfTile(Position);
-		Direction = map.GetTileInfo(Position).Directions.PickRandom();
+		var tile = map.GetTileInfo(Position);
+
+		if (tile.TileType == TileTypes.NoneGiven)
+		{
+			return;
+		}
+		Direction = tile.Directions.PickRandom();
 	}
 
 	private void CenterInTile()

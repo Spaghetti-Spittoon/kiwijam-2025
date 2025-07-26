@@ -49,80 +49,15 @@ public class MapHandler
 		// Convert local position to cell (map) coordinates
 		Vector2I cellPos = _map.LocalToMap(localPos);
 
-		// Get atlas coordinates for that cell
-		Vector2I atlasCoords = _map.GetCellAtlasCoords(cellPos);
-
-		return GetTileInfo(atlasCoords.X, atlasCoords.Y);
-		
-		// var result = new TileDefinition();
-
-		// var halfX = PixelToHalfTile(worldSpacePosition.X);
-		// var halfY = PixelToHalfTile(worldSpacePosition.Y);
-		// var fullX = halfX / 2;
-		// var fullY = halfY / 2;
-		// var halfXOffset = halfX % 2;
-		// var halfYOffset = halfY % 2;
-
-		// //Center of the tile
-		// if (halfXOffset == 1 && halfYOffset == 1)
-		// {
-		// 	return GetTileInfo(fullX, fullY);
-		// }
-
-		// //Left of center
-		// if (halfXOffset == 0 && halfYOffset == 1)
-		// {
-		// 	GD.Print("left of center");
-		// 	var leftTile = GetTileInfo(fullX - 1, fullY);
-		// 	var rightTile = GetTileInfo(fullX, fullY);
-
-		// 	if (leftTile.Directions.Contains(Vector2I.Right))
-		// 	{
-		// 		result.Directions.Add(Vector2I.Left);
-		// 	}
-		// 	if (rightTile.Directions.Contains(Vector2I.Left))
-		// 	{
-		// 		result.Directions.Add(Vector2I.Right);
-		// 	}
-		// }
-
-		// //Top left
-		// if (halfXOffset == 0 && halfYOffset == 0)
-		// {
-		// 	//Top left
-		// 	if (GetTileInfo(fullX - 1, fullY - 1).Directions.Contains(Vector2I.Down + Vector2I.Right))
-		// 	{
-		// 		result.Directions.Add(Vector2I.Up + Vector2I.Left);
-		// 	}
-		// 	//Top Right
-		// 	if (GetTileInfo(fullX, fullY - 1).Directions.Contains(Vector2I.Down + Vector2I.Left))
-		// 	{
-		// 		result.Directions.Add(Vector2I.Up + Vector2I.Right);
-		// 	}
-		// 	//Bottom left
-		// 	if (GetTileInfo(fullX - 1, fullY).Directions.Contains(Vector2I.Up + Vector2I.Right))
-		// 	{
-		// 		result.Directions.Add(Vector2I.Down + Vector2I.Left);
-		// 	}
-		// 	//Bottom Right
-		// 	if (GetTileInfo(fullX, fullY).Directions.Contains(Vector2I.Up + Vector2I.Left))
-		// 	{
-		// 		result.Directions.Add(Vector2I.Down + Vector2I.Right);
-		// 	}
-		// }
-
-		// return result;
+		return GetTileAtAtlasCoords(cellPos);
 	}
 
-	public TileDefinition GetTileInfo(int x, int y)
+	public TileDefinition GetTileAtAtlasCoords(Vector2I atlasCoords)
 	{
-		var atlasPos = _map.GetCellAtlasCoords(new Vector2I(x, y));
-		GD.Print($"{nameof(GetTileInfo)}, looking for match: {atlasPos}");
-
-		if (atlasTiles.ContainsKey(atlasPos))
+		if (atlasTiles.ContainsKey(atlasCoords))
 		{
-			var match = atlasTiles[atlasPos];
-			match.AtlasCoordinates = atlasPos;
+			var match = atlasTiles[atlasCoords];
+			match.AtlasCoordinates = atlasCoords;
 			return match;
 		}
 		return new TileDefinition(); //return empty since there is no tile info availablew

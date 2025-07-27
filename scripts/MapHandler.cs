@@ -86,7 +86,7 @@ public class MapHandler
 		var crossedCenterY = diffY < boundaryOffset;
 		var isCentered = crossedCenterX && crossedCenterY;
 		var message = $"snapped: {snapped}, offsetFifty: {offsetFifty}, diffX: {diffX}, diffY: {diffY}, crossedCenterX: {crossedCenterX}, crossedCenterY: {crossedCenterY}, isCentered: {isCentered}";
-		GD.Print(message);
+		// GD.Print(message);
 
 		if (canvas != null) //print a string on screen
 		{

@@ -41,21 +41,21 @@ public partial class Player : Area2D
 
 	public override void _Draw()
 	{
-		var oldPos = Position;
-		var isCentered = map.IsCentered(oldPos, this);
-		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
+		// var oldPos = Position;
+		// var isCentered = map.IsCentered(oldPos, this);
+		// // GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
 
 
-		if (isCentered == false)
-		{
-			var rect1 = new Rect2(new Vector2(50, 50), new Vector2(10, 10));
-			Color color1 = new Color(1, 0, 0); // Red
-			DrawRect(rect1, color1);
-			return;
-		}
-		var rect = new Rect2(new Vector2(50, 50), new Vector2(10, 10));
-		Color color = new Color(1, 0, 0); // Green
-		DrawRect(rect, color);
+		// if (isCentered == false)
+		// {
+		// 	var rect1 = new Rect2(new Vector2(50, 50), new Vector2(10, 10));
+		// 	Color color1 = new Color(1, 0, 0); // Red
+		// 	DrawRect(rect1, color1);
+		// 	return;
+		// }
+		// var rect = new Rect2(new Vector2(50, 50), new Vector2(10, 10));
+		// Color color = new Color(1, 0, 0); // Green
+		// DrawRect(rect, color);
 	}
 
 	public override void _Process(double delta)
@@ -63,7 +63,6 @@ public partial class Player : Area2D
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
 		var isCentered = map.IsCentered(oldPos);
-		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
 
 		if (isCentered == false)
 		{
@@ -74,7 +73,7 @@ public partial class Player : Area2D
 		var tile = map.GetTileInfo(Position);
 		var enumType = tile.TileType.GetType();
 		var enumName = Enum.GetName(enumType, tile.TileType);
-		GD.Print($"{nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
+		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}, {nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
 		var positionsString = new StringBuilder();
 
 		for (int i = 0; i < tile.Directions.Count; i++)
@@ -166,26 +165,24 @@ public partial class Player : Area2D
 			return;
 		}
 
-		GD.Print($"automatically choosing direction");
 
 		if (tile.Directions.Contains((Vector2I)previousDirection))
 		{
-			var destinationTilePos = new Vector2(currentTilePos.X + 100 * previousDirection.X, currentTilePos.Y + 100 * previousDirection.Y);
-			Direction = destinationTilePos.Normalized();
-			GD.Print($"automatically chosen direction: {Direction}");
 			return;
 		}
 
 		if (tile.Directions.Count == 0)
 		{
 			GD.Print("no directions. this tile is out of bounds. turn around!");
-			Direction = -Direction;
+			Direction = -previousDirection;
 			return;
 		}
 
 		//randomly select a direction since there is at least one!
-		var targetPos = new Vector2(currentTilePos.X + 100 * tile.Directions[0].X, currentTilePos.Y + 100 * tile.Directions[0].Y);
-		Direction = targetPos.Normalized();
+		tile.Directions.Shuffle();
+		var chosenDirection = tile.Directions[0];
+		var targetPos = new Vector2(currentTilePos.X + 100 * chosenDirection.X, currentTilePos.Y + 100 * chosenDirection.Y);
+		Direction = chosenDirection;
 		GD.Print($"automatically chosen direction: {Direction}");
 	}
 

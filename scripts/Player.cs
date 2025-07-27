@@ -127,9 +127,11 @@ public partial class Player : Area2D
 			}
 		}
 
-		if (PlayerInput == -Direction)
+		if (PlayerInput == -Direction && directionSet) //let the player move backwards at any time
 		{
+			GD.Print($"flipped on user input to: {PlayerInput}");
 			Direction = PlayerInput;
+			return;
 		}
 
 		if (isCentered && directionSet)
@@ -143,12 +145,14 @@ public partial class Player : Area2D
 		//let the player keep moving without input
 		if (tile.Directions.Contains((Vector2I)Direction)) 
 		{
+			GD.Print($"valid auto direction: {Direction}");
 			hasHitBoundary = false;
 			return;
 		}
 
 		if (hasHitBoundary)
 		{
+			GD.Print("has hit boundary");
 			return; //continue travelling in the opposite direction
 		}
 		hasHitBoundary = true;

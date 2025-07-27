@@ -35,6 +35,7 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[connection signal="area_entered" from="." to="." method="OnAreaEntered"]
 [connection signal="editor_state_changed" from="RichTextLabel" to="." method="OnTextResized"]
 [connection signal="minimum_size_changed" from="RichTextLabel" to="." method="OnTextResized"]
 [connection signal="resized" from="RichTextLabel" to="." method="OnTextResized"]

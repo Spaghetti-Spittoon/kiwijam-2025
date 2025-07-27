@@ -14,7 +14,10 @@ public partial class Word : Area2D
 
 	[Export]
 	public RichTextLabel Text { get; set; }
-	
+
+	[Export]
+	public int MoveSpeed { get; set; } = 100;
+
 	Vector2I Direction;
 
 	public override void _Ready()
@@ -28,95 +31,66 @@ public partial class Word : Area2D
 		var parent = GetParent();
 		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");
 		map = new MapHandler(layer);
-		Position = map.SnapToHalfTile(Position);
+
+		PickDirection();
 	}
 
 	public override void _Process(double delta)
 	{
-		//Too close to the player
-		if ((Position - Player.Instance.Position).Length() < 50)
+		var oldPosition = Position;
+		Position += (Vector2)Direction * (float)delta * MoveSpeed;
+
+		if (map.GetTileInfo(Position).TileType == TileTypes.NoneGiven)
 		{
-			return;
+			// Turn around when we enter a non-navigation tile
+			Direction = -Direction;
+			Position += (Vector2)Direction * 0.01F;
+		}
+		if (map.HasPassedFullTile(oldPosition, Position))
+		{
+			// GD.Print("Enemy passed Fulltile");
+			PickDirection();
 		}
 
-		var oldPos = Position;
-		Position += (float)delta * (Vector2)Direction * Player.Instance.Speed;
-
-		if (map.IsCentered(oldPos))
-		{
-			//We want to try and chase the player
-			Position = map.SnapToHalfTile(Position);
-			var tile = map.GetTileInfo(Position);
-			Direction = TryGetDirection(tile);
-		}
-			
 	}
 
-	private Vector2I TryGetDirection(TileDefinition tile)	
-	{		
-		var playerIsRight = Player.Instance.Position.X > Position.X;
-		var playerIsLeft = Player.Instance.Position.X < Position.X;
-		var playerIsDown = Player.Instance.Position.Y > Position.Y;
-		var playerIsUp = Player.Instance.Position.Y < Position.Y;
-
-		if (playerIsUp)
-		{
-			if(playerIsRight && tile.Directions.Contains(Vector2I.Up + Vector2I.Right))
-			{
-				return Vector2I.Up + Vector2I.Right;
-			}
-			if (playerIsLeft && tile.Directions.Contains(Vector2I.Up + Vector2I.Left))
-			{
-				return Vector2I.Up + Vector2I.Left;
-			}
-		}
-
-		if (playerIsDown)
-		{
-			if (playerIsRight && tile.Directions.Contains(Vector2I.Down + Vector2I.Right))
-			{
-				return Vector2I.Down + Vector2I.Right;
-			}
-			if (playerIsLeft && tile.Directions.Contains(Vector2I.Down + Vector2I.Left))
-			{
-				return Vector2I.Down + Vector2I.Left;
-			}
-		}
-
-		if (playerIsRight && tile.Directions.Contains(Vector2I.Right))
-		{
-			return Vector2I.Right;
-		}
-		if (playerIsLeft && tile.Directions.Contains(Vector2I.Left))
-		{
-			return Vector2I.Left;
-		}
-
-		if (tile.Directions.Count > 0)
-		{
-			return tile.Directions.PickRandom();
-		}
-		return Vector2I.Zero;
-	}
-
-	public void OnTextResized()
+	private void PickDirection()
 	{
-		if (Collision.Shape is RectangleShape2D)
+		Position = map.SnapToCenterOfTile(Position);
+
+		var tile = map.GetTileInfo(Position);
+
+		if (tile.TileType == TileTypes.NoneGiven)
 		{
-			GD.Print("Updated collision shape size");
-			(Collision.Shape as RectangleShape2D).Size = Text.GetMinimumSize();
+			// If we go off the map, Turn around!
+			Direction = -Direction;
 		}
+		else
+		{
+			Direction = tile.Directions.PickRandom();
+		}
+		// Also nudge enemy in its new direction to avoid re-triggering crossing the middle of a tile
+		Position += (Vector2)Direction * 0.01F;
 	}
+
 
 	public void SetText(string text)
 	{
 		Text.Text = text;
-		// OnTextResized();
 	}
 
 	public void Die()
 	{
 		EmitSignal(SignalName.WordDestroyed, this);
 		QueueFree();
+	}
+
+	private void OnAreaEntered(Area2D area2D)
+	{
+		Die();
+		if (area2D is Player)
+		{
+			(area2D as Player).AddPoint();
+		}
 	}
 }

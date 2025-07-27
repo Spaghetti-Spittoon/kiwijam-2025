@@ -51,6 +51,8 @@ animations = [{
 }]
 
 [node name="Player" type="Area2D"]
+collision_layer = 3
+collision_mask = 5
 script = ExtResource("1_qhqgy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -65,5 +67,14 @@ frame_progress = 0.905374
 
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("4_dqkch")
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -51.0
+offset_right = 21.0
+offset_bottom = -28.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="area_entered" from="." to="." method="OnBodyEntered"]

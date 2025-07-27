@@ -22,6 +22,10 @@ public partial class Player : Area2D
 
 	bool hasHitBoundary = false;
 
+	private int score = 0;
+
+	private Label scoreLabel;
+
 	public void Start(Vector2 position)
 	{
 		Position = position;
@@ -39,6 +43,8 @@ public partial class Player : Area2D
 		SetCameraTimeMapLayer();
 		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		animatedSprite2D.Play();
+		scoreLabel = GetNode<Label>("ScoreLabel");
+		scoreLabel.Hide();
 	}
 
 	public override void _Process(double delta)
@@ -175,12 +181,15 @@ public partial class Player : Area2D
 
 	private void OnBodyEntered(Node2D body)
 	{
-		Hide();
-		EmitSignal(SignalName.Hit);
+		if (body is EnemyHandler)
+		{
+			Hide();
+			EmitSignal(SignalName.Hit);
 
-		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+			GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+		}
 	}
-	
+
 	public bool IsPlayerCentered(Vector2 oldPos, CanvasItem canvas = null)
 	{
 		const int boundaryOffset = 25;
@@ -207,5 +216,22 @@ public partial class Player : Area2D
 			return true;
 		}
 		return false;
+
 	}
+
+	public void AddPoint()
+	{
+		score++;
+		scoreLabel.Text = $"{score}";
+		scoreLabel.Show();
+	}
+
+	public int DumpPoints()
+	{
+		int currentPoints = score;
+		score = 0;
+		scoreLabel.Hide();
+		return currentPoints;
+	}
+
 }

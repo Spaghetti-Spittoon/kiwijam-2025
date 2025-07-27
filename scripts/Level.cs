@@ -19,11 +19,16 @@ public partial class Level : Node2D
 	List<Node2D> spawnedObstacles;
 	MapHandler mapHandler;
 
+	private int score;
+
+	private Player player;
+
 	public override void _Ready()
 	{
 		enemyScene = ResourceLoader.Load("res://scenes/enemy.tscn") as PackedScene;
 		wordScene = ResourceLoader.Load("res://scenes/word.tscn") as PackedScene;
 		mapLayer = GetNode<TileMapLayer>("TileMapLayer");
+		player = GetNode<Player>("Player");
 		bus = GetNode<SignalBus>("/root/SignalBus");
 		grid = GetNode<Grid>("/root/Grid");
 
@@ -31,7 +36,7 @@ public partial class Level : Node2D
 		var wordsString = wordsFile.GetAsText();
 		var parsedJson = Json.ParseString(wordsString);
 		var jsonAsDictionary = parsedJson.AsGodotDictionary();
-		words = (string[]) jsonAsDictionary["phone_words"];
+		words = (string[])jsonAsDictionary["phone_words"];
 
 		wordsFile.Close();
 
@@ -86,6 +91,11 @@ public partial class Level : Node2D
 		enemy.Position = enemySpawnLocation.Position;
 
 		AddChild(enemy);
+	}
+
+	public void DropPoints()
+	{
+		score += player.DumpPoints();
 	}
 
 	private void OnWordTimerTimeout()

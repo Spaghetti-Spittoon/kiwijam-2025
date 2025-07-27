@@ -1,10 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0jn11d5vaqh"]
+[gd_scene load_steps=4 format=3 uid="uid://b0jn11d5vaqh"]
 
 [ext_resource type="Texture2D" uid="uid://bbudcssijc6oj" path="res://assets/TargetPhone.png" id="1_08mii"]
+[ext_resource type="Script" uid="uid://0m1hfbwet7to" path="res://scripts/Phone.cs" id="1_ewalk"]
 
-[node name="Phone" type="Node2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ewalk"]
+radius = 36.1248
+
+[node name="Phone" type="Area2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_ewalk")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("1_08mii")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(48, 51)
+shape = SubResource("CircleShape2D_ewalk")

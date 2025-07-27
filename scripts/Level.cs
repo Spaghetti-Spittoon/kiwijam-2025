@@ -11,6 +11,8 @@ public partial class Level : Node2D
 	SignalBus bus;
 	Grid grid;
 	Button button;
+	TextureRect death;
+	bool dead = false;
 
 	public override void _Ready()
 	{
@@ -20,6 +22,8 @@ public partial class Level : Node2D
 		bus = GetNode<SignalBus>("/root/SignalBus");
 		button = GetNode<Button>("TestIncreaseButton");
 		grid = GetNode<Grid>("/root/Grid");
+		death = GetNode<TextureRect>("DeathMessage");
+
 		button.ButtonUp += OnLevelExpanded;
 		bus.LevelExpanded += OnLevelExpanded;
 
@@ -27,9 +31,10 @@ public partial class Level : Node2D
 		var wordsString = wordsFile.GetAsText();
 		var parsedJson = Json.ParseString(wordsString);
 		var jsonAsDictionary = parsedJson.AsGodotDictionary();
-		words = (string[]) jsonAsDictionary["phone_words"];
+		words = (string[])jsonAsDictionary["phone_words"];
 
 		wordsFile.Close();
+		death.Visible = false;
 
 		AddEnemy();
 	}
@@ -62,7 +67,14 @@ public partial class Level : Node2D
 	{
 		if (Input.IsActionJustReleased("add_coin"))
 		{
-			AddEnemy();
+			if (!dead)
+			{
+				AddEnemy();
+			}
+			else
+			{
+				GetTree().ChangeSceneToFile("res://scenes/HomeScreen.tscn");
+			}
 		}
 	}
 
@@ -90,5 +102,11 @@ public partial class Level : Node2D
 		word.Position = phoneLocation.Position;
 
 		AddChild(word);
+	}
+
+	private void OnPlayerHit()
+	{
+		death.Visible = true;
+		dead = true;
 	}
 }

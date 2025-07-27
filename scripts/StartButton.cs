@@ -19,10 +19,6 @@ public partial class StartButton : TextureButton
 	
 	public void OnClick()
 	{
-		var instance = level.Instantiate<Level>();
-		var parent = this.GetParent();
-		var cast2D = (CanvasLayer)parent;
-		cast2D.AddSibling(instance);
-		cast2D.Hide();
+	GetTree().ChangeSceneToFile("res://scenes/Level.tscn");
 	}
 }

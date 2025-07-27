@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://bopa0xia4ehi1"]
+[gd_scene load_steps=8 format=4 uid="uid://bopa0xia4ehi1"]
 
 [ext_resource type="Script" uid="uid://ckopa6xxeaib0" path="res://scripts/Level.cs" id="1_6vs76"]
 [ext_resource type="Texture2D" uid="uid://cg3kfchlv6ps5" path="res://assets/gridtiles/tileset.png" id="2_dke22"]
 [ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
 [ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
+[ext_resource type="Texture2D" uid="uid://b8rpb0af7ygoc" path="res://assets/Death.png" id="5_qifjx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4qegb"]
 texture = ExtResource("2_dke22")
@@ -74,4 +75,12 @@ position = Vector2(650, 150)
 wait_time = 5.0
 autostart = true
 
+[node name="DeathMessage" type="TextureRect" parent="."]
+offset_left = -8.0
+offset_top = 202.0
+offset_right = 1405.0
+offset_bottom = 486.0
+texture = ExtResource("5_qifjx")
+
+[connection signal="Hit" from="Player" to="." method="OnPlayerHit"]
 [connection signal="timeout" from="WordTimer" to="." method="OnWordTimerTimeout"]

@@ -116,7 +116,6 @@ public class MapHandler
 		return x1 != x2 || y1 != y2;
 	}
 
-
 	public Vector2I SnapToHalfTile(Godot.Vector2 oldPos)
 	{
 		var result = new Vector2I();

@@ -62,6 +62,13 @@ public partial class Player : Area2D
 	{
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
+		var tile = map.GetTileInfo(Position);
+
+		if (tile.TileType == TileTypes.NoneGiven)
+		{
+			Direction = -Direction;
+		}
+
 		var isCentered = map.IsCentered(oldPos);
 
 		if (isCentered == false)
@@ -70,7 +77,7 @@ public partial class Player : Area2D
 		}
 		var directionSet = false;
 		var currentTilePos = map.SnapToHalfTile(Position);
-		var tile = map.GetTileInfo(Position);
+
 		var enumType = tile.TileType.GetType();
 		var enumName = Enum.GetName(enumType, tile.TileType);
 		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}, {nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");

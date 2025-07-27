@@ -41,7 +41,7 @@ public partial class EnemyHandler : Area2D
 	private void PickDirection()
 	{
 		var startPos = Position;
-		Position = map.SnapToFullTile(Position);
+		Position = map.SnapToFullTiles(Position);
 		// GD.Print($"Snapping from {startPos} to {Position}");
 		var tile = map.GetTileInfo(Position);
 

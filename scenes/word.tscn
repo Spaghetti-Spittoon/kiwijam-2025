@@ -6,6 +6,8 @@
 size = Vector2(10, 20)
 
 [node name="Word" type="Area2D" node_paths=PackedStringArray("Collision", "Text") groups=["words"]]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_ar2rp")
 Collision = NodePath("CollisionShape2D")
 Text = NodePath("RichTextLabel")

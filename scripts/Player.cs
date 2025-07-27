@@ -18,7 +18,6 @@ public partial class Player : Area2D
 
 	private TileMapLayer tileMapLayer;
 
-	private Vector2 previousDirection = Vector2.Right;
 	bool hasHitBoundary = false;
 
 	public void Start(Vector2 position)
@@ -64,6 +63,11 @@ public partial class Player : Area2D
 		var oldPos = Position;
 		Position += (float)delta * (Vector2)Direction * Speed;
 		var isCentered = map.IsCentered(oldPos);
+
+		if (hasHitBoundary)
+		{
+			return;
+		}
 
 		if (isCentered == false)
 		{
@@ -142,7 +146,6 @@ public partial class Player : Area2D
 			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
 			{
 				directionSet = true;
-				previousDirection = Direction;
 				Direction = Vector2.Right;
 				// var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y);
 				// Direction = (destinationTilePos - Position).Normalized();
@@ -152,7 +155,6 @@ public partial class Player : Area2D
 			else if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left))
 			{
 				directionSet = true;
-				previousDirection = Direction;
 				Direction = Vector2.Left;
 				// var destinationTilePos = new Vector2(currentTilePos.X - 100, currentTilePos.Y);
 				// Direction = (destinationTilePos - Position).Normalized();
@@ -168,32 +170,31 @@ public partial class Player : Area2D
 		}
 
 		//let the player keep moving without input
-		if (tile.Directions.Contains((Vector2I)previousDirection)) 
+		if (tile.Directions.Contains((Vector2I)Direction)) 
 		{
 			hasHitBoundary = false;
 			return;
 		}
 
-		if (tile.Directions.Count == 0)
+		// if (tile.Directions.Count == 0)
+		// {
+		if (hasHitBoundary)
 		{
-			if (hasHitBoundary)
-			{
-				return; //continue travelling in the opposite direction
-			}
-			hasHitBoundary = true;
-			GD.Print("no directions. this tile is out of bounds. turn around!");
-			var copyDirection = Direction;
-			Direction = -previousDirection;
-			previousDirection = copyDirection;
-			return;
+			return; //continue travelling in the opposite direction
 		}
+		hasHitBoundary = true;
+		// GD.Print("no directions. this tile is out of bounds. turn around!");
+		Direction = -Direction;
+		GD.Print($"player has reached a boundary. Turning arround to direction: {Direction}");
+		return;
+		// }
 
 		//randomly select a direction since there is at least one!
-		tile.Directions.Shuffle();
-		var chosenDirection = tile.Directions[0];
-		var targetPos = new Vector2(currentTilePos.X + 100 * chosenDirection.X, currentTilePos.Y + 100 * chosenDirection.Y);
-		Direction = chosenDirection;
-		GD.Print($"automatically chosen direction: {Direction}");
+		// tile.Directions.Shuffle();
+		// var chosenDirection = tile.Directions[0];
+		// var targetPos = new Vector2(currentTilePos.X + 100 * chosenDirection.X, currentTilePos.Y + 100 * chosenDirection.Y);
+		// Direction = chosenDirection;
+		// GD.Print($"automatically chosen direction: {Direction}");
 	}
 
 	private void SetCameraTimeMapLayer()

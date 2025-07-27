@@ -31,6 +31,12 @@ public partial class EnemyHandler : Area2D
 		var oldPosition = Position;
 		Position += (Vector2)Direction * (float)delta * MoveSpeed;
 
+		if (map.GetTileInfo(Position).TileType == TileTypes.NoneGiven)
+		{
+			// Turn around when we enter a non-navigation tile
+			Direction = -Direction;
+			Position += (Vector2)Direction * 0.01F;
+		}
 		if (map.HasPassedFullTile(oldPosition, Position))
 		{
 			// GD.Print("Enemy passed Fulltile");
@@ -41,7 +47,7 @@ public partial class EnemyHandler : Area2D
 	private void PickDirection()
 	{
 		var startPos = Position;
-		Position = map.SnapToFullTiles(Position);
+		Position = map.SnapToCenterOfTile(Position);
 		// GD.Print($"Snapping from {startPos} to {Position}");
 		var tile = map.GetTileInfo(Position);
 

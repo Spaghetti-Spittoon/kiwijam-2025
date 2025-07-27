@@ -41,11 +41,11 @@ public class MapHandler
 		_map = inputMap;
 	}
 
-	public TileDefinition GetTileInfo(Godot.Vector2 worldSpacePosition)
+	public TileDefinition GetTileInfo(Vector2 worldSpacePosition)
 	{
 		// GD.Print($"{nameof(GetTileInfo)}, input: {worldSpacePosition}");
 		// Convert world position to local coordinates relative to TileMapLayer
-		Godot.Vector2 localPos = _map.ToLocal(worldSpacePosition);
+		Vector2 localPos = _map.ToLocal(worldSpacePosition);
 
 		// Convert local position to cell (map) coordinates
 		Vector2I cellPos = _map.LocalToMap(localPos);
@@ -74,24 +74,20 @@ public class MapHandler
 		return new TileDefinition(); //return empty since there is no tile info availablew
 	}
 
-	public bool IsCentered(Godot.Vector2 oldPos)
+	public bool IsCentered(Vector2 oldPos)
 	{
-		const int center = 50;
 		const int boundaryOffset = 20;
 		//Check that we weren't previously standing on the boundary
-		var snapped = SnapToHalfTile(oldPos);
-		var absoluted = new Vector2I(Math.Abs(snapped.X), Math.Abs(snapped.Y));
-		var maskedX = (int)absoluted.X & 0b111111;
-		var maskedY = (int)absoluted.Y & 0b111111;
-		var outsideCenterX = maskedX > center + boundaryOffset || maskedX < center - boundaryOffset;
-		var outsideCenterY = maskedY > center + boundaryOffset || maskedY < center - boundaryOffset;
-		GD.Print($"IsCentered, maskedX: {maskedX}, maskedY: {maskedY}, outsideCenterX: {outsideCenterX}, outsideCenterY: {outsideCenterY}");
+		var snapped = SnapToHalfTile(oldPos); //assume this is the center
+		var offsetFifty = new Vector2I(snapped.X - 50, snapped.Y - 50);
+		var crossedCenterX = Math.Abs(offsetFifty.X - oldPos.X) < boundaryOffset;
+		var crossedCenterY = Math.Abs(offsetFifty.Y - oldPos.Y) < boundaryOffset;
 
-		if (outsideCenterX || outsideCenterY)
+		if (crossedCenterX && crossedCenterY)
 		{
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public bool HasPassedFullTile(Vector2 startPos, Vector2 endPos)

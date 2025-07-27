@@ -1,21 +1,49 @@
-[gd_scene load_steps=7 format=3 uid="uid://cddai83v88cgu"]
+[gd_scene load_steps=11 format=3 uid="uid://cddai83v88cgu"]
 
-[ext_resource type="Texture2D" uid="uid://dql7bpiwffaeb" path="res://assets/sparky_move1.png" id="1_g2els"]
 [ext_resource type="Script" uid="uid://ca617tpbrmov7" path="res://scripts/Player.cs" id="1_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://cc5kcbn1l5dee" path="res://assets/sparky_move2.png" id="2_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://dxq4d535gbrfv" path="res://assets/Player-sheet.png" id="2_qhqgy"]
 [ext_resource type="Script" uid="uid://bcllsx562tycl" path="res://scripts/CameraLimiter.cs" id="4_dqkch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
 radius = 21.0238
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqkch"]
+atlas = ExtResource("2_qhqgy")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
+atlas = ExtResource("2_qhqgy")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuyoq"]
+atlas = ExtResource("2_qhqgy")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjrip"]
+atlas = ExtResource("2_qhqgy")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
+atlas = ExtResource("2_qhqgy")
+region = Rect2(400, 0, 100, 100)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_dqkch"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_g2els")
+"texture": SubResource("AtlasTexture_dqkch")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_qhqgy")
+"texture": SubResource("AtlasTexture_qlg0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuyoq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjrip")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smehm")
 }],
 "loop": true,
 "name": &"move",
@@ -32,6 +60,7 @@ debug_color = Color(0.933333, 0.137255, 0.87451, 0.419608)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dqkch")
 animation = &"move"
+autoplay = "move"
 frame_progress = 0.905374
 
 [node name="Camera2D" type="Camera2D" parent="."]

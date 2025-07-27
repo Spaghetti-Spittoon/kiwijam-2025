@@ -74,14 +74,26 @@ public class MapHandler
 		return new TileDefinition(); //return empty since there is no tile info availablew
 	}
 
-	public bool IsCentered(Vector2 oldPos)
+	public bool IsCentered(Vector2 oldPos, CanvasItem canvas = null)
 	{
-		const int boundaryOffset = 20;
+		const int boundaryOffset = 25;
 		//Check that we weren't previously standing on the boundary
-		var snapped = SnapToHalfTile(oldPos); //assume this is the center
+		var snapped = SnapToFullTiles(oldPos); //assume this is the center
 		var offsetFifty = new Vector2I(snapped.X - 50, snapped.Y - 50);
-		var crossedCenterX = Math.Abs(offsetFifty.X - oldPos.X) < boundaryOffset;
-		var crossedCenterY = Math.Abs(offsetFifty.Y - oldPos.Y) < boundaryOffset;
+		var diffX = Math.Abs(offsetFifty.X - oldPos.X);
+		var diffY = Math.Abs(offsetFifty.Y - oldPos.Y);
+		var crossedCenterX = diffX < boundaryOffset;
+		var crossedCenterY = diffY < boundaryOffset;
+		var isCentered = crossedCenterX && crossedCenterY;
+		var message = $"snapped: {snapped}, offsetFifty: {offsetFifty}, diffX: {diffX}, diffY: {diffY}, crossedCenterX: {crossedCenterX}, crossedCenterY: {crossedCenterY}, isCentered: {isCentered}";
+		GD.Print(message);
+
+		if (canvas != null)
+		{
+			Font font = ThemeDB.FallbackFont;
+			var position = new Vector2(-400, -200);
+			canvas.DrawString(font, position, message, HorizontalAlignment.Left, -1, 24);
+		}
 
 		if (crossedCenterX && crossedCenterY)
 		{
@@ -113,11 +125,11 @@ public class MapHandler
 		return result;
 	}
 
-	public Vector2 SnapToFullTile(Vector2 inPos)
+	public Vector2I SnapToFullTiles(Vector2 oldPos)
 	{
-		return new Vector2(
-			(float)Math.Floor((inPos.X + 25.0) / 100.0) * 100.0F + 50.0F,
-			(float)Math.Floor((inPos.Y + 25.0) / 100.0) * 100.0F + 50.0F
-		);
+		var result = new Vector2I();
+		result.X = PixelToTile(oldPos.X + GridSize) * GridSize;
+		result.Y = PixelToTile(oldPos.Y + GridSize) * GridSize;
+		return result;
 	}
 }

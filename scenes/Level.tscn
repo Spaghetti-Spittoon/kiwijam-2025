@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=4 uid="uid://bopa0xia4ehi1"]
 
 [ext_resource type="Script" uid="uid://ckopa6xxeaib0" path="res://scripts/Level.cs" id="1_6vs76"]
-[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_k5jlv"]
+[ext_resource type="PackedScene" uid="uid://y2y6igxmiwh3" path="res://scenes/enemy.tscn" id="1_k5jlv"]
 [ext_resource type="Texture2D" uid="uid://cg3kfchlv6ps5" path="res://assets/gridtiles/tileset.png" id="2_dke22"]
 [ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
 [ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
@@ -41,6 +41,7 @@ sources/3 = SubResource("TileSetAtlasSource_4qegb")
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_6vs76")
+EnemyScene = ExtResource("1_k5jlv")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(1, 0)
@@ -57,9 +58,6 @@ position = Vector2(976, 472)
 position = Vector2(350, 250)
 Speed = 100
 
-[node name="Enemy" parent="." instance=ExtResource("1_k5jlv")]
-position = Vector2(760, 456)
-
 [node name="Word" parent="." instance=ExtResource("6_dke22")]
 position = Vector2(456, 248)
 
@@ -69,3 +67,6 @@ offset_top = 312.0
 offset_right = 784.0
 offset_bottom = 360.0
 text = "Increase Size"
+
+[node name="EnemySpawnLocation" type="Marker2D" parent="."]
+position = Vector2(650, 150)

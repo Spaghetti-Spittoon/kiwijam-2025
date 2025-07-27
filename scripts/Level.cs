@@ -3,6 +3,10 @@ using System;
 
 public partial class Level : Node2D
 {
+	[Export]
+	public PackedScene EnemyScene { get; set; }
+
+
 	TileMapLayer mapLayer;
 	SignalBus bus;
 	Grid grid;
@@ -40,5 +44,24 @@ public partial class Level : Node2D
 			}
 		}
 		return null;
+	}
+
+	public override void _Process(double delta)
+	{
+		if (Input.IsActionJustReleased("add_coin"))
+		{
+			AddEnemy();
+		}
+	}
+
+	private void AddEnemy()
+	{
+		Area2D enemy = EnemyScene.Instantiate<Area2D>();
+
+		var enemySpawnLocation = GetNode<Marker2D>("EnemySpawnLocation");
+
+		enemy.Position = enemySpawnLocation.Position;
+
+		AddChild(enemy);
 	}
 }

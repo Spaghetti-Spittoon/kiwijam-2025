@@ -27,6 +27,7 @@ script = ExtResource("1_qhqgy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_g2els")
+debug_color = Color(0.933333, 0.137255, 0.87451, 0.419608)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_dqkch")
@@ -36,4 +37,4 @@ frame_progress = 0.905374
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("4_dqkch")
 
-[connection signal="body_entered" from="." to="." method="OnBodyEntered"]
+[connection signal="area_entered" from="." to="." method="OnBodyEntered"]

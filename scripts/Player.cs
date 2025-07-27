@@ -11,7 +11,7 @@ public partial class Player : Area2D
 	public delegate void HitEventHandler();
 
 	[Export]
-	public int Speed { get; set; } = 400;
+	public int Speed { get; set; } = 600;
 
 	public Vector2 ScreenSize;
 
@@ -47,12 +47,14 @@ public partial class Player : Area2D
 		Position += (float)delta * (Vector2)Direction * Speed;
 		var tile = map.GetTileInfo(Position);
 
-		if (tile.TileType == TileTypes.NoneGiven)
+		if (tile.TileType == TileTypes.NoneGiven && hasHitBoundary == false)
 		{
+			hasHitBoundary = true;
 			Direction = -Direction;
+			GD.Print($"invalid type type. direction flipped to: {Direction}");
 		}
 
-		var isCentered = map.IsCentered(oldPos);
+		var isCentered = IsPlayerCentered(oldPos);
 		var directionSet = false;
 		var currentTilePos = map.SnapToHalfTile(Position);
 
@@ -129,6 +131,7 @@ public partial class Player : Area2D
 
 		if (PlayerInput == -Direction && directionSet) //let the player move backwards at any time
 		{
+			hasHitBoundary = false;
 			GD.Print($"flipped on user input to: {PlayerInput}");
 			Direction = PlayerInput;
 			return;
@@ -143,7 +146,7 @@ public partial class Player : Area2D
 		}
 
 		//let the player keep moving without input
-		if (tile.Directions.Contains((Vector2I)Direction)) 
+		if (tile.Directions.Contains((Vector2I)Direction))
 		{
 			GD.Print($"valid auto direction: {Direction}");
 			hasHitBoundary = false;
@@ -152,7 +155,7 @@ public partial class Player : Area2D
 
 		if (hasHitBoundary)
 		{
-			GD.Print("has hit boundary");
+			GD.Print($"has hit boundary. current direction: {Direction}");
 			return; //continue travelling in the opposite direction
 		}
 		hasHitBoundary = true;
@@ -176,5 +179,33 @@ public partial class Player : Area2D
 		EmitSignal(SignalName.Hit);
 
 		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+	}
+	
+	public bool IsPlayerCentered(Vector2 oldPos, CanvasItem canvas = null)
+	{
+		const int boundaryOffset = 25;
+		//Check that we weren't previously standing on the boundary
+		var snapped = map.SnapToFullTiles(oldPos); //assume this is the center
+		var offsetFifty = new Vector2I(snapped.X - 50, snapped.Y - 50);
+		var diffX = Math.Abs(offsetFifty.X - oldPos.X);
+		var diffY = Math.Abs(offsetFifty.Y - oldPos.Y);
+		var crossedCenterX = diffX < boundaryOffset;
+		var crossedCenterY = diffY < boundaryOffset;
+		var isCentered = crossedCenterX && crossedCenterY;
+		var message = $"snapped: {snapped}, offsetFifty: {offsetFifty}, diffX: {diffX}, diffY: {diffY}, crossedCenterX: {crossedCenterX}, crossedCenterY: {crossedCenterY}, isCentered: {isCentered}";
+		// GD.Print(message);
+
+		if (canvas != null) //print a string on screen
+		{
+			Font font = ThemeDB.FallbackFont;
+			var position = new Vector2(-400, -200);
+			canvas.DrawString(font, position, message, HorizontalAlignment.Left, -1, 24);
+		}
+
+		if (crossedCenterX && crossedCenterY)
+		{
+			return true;
+		}
+		return false;
 	}
 }

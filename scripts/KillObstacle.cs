@@ -11,6 +11,9 @@ public partial class KillObstacle : Area2D
 	}
 
 	[Export]
+	public CollisionShape2D _collisionShape;
+
+	[Export]
 	public AnimatedSprite2D animatedSprite;
 
 	[Export]
@@ -52,6 +55,7 @@ public partial class KillObstacle : Area2D
 			GD.PushError("KillObstacle not setup properly! (animatedSprite or DangerousAnimationName)");
 		}
 		_remainingSafeTime = SafeTime;
+		_collisionShape.Disabled = true;
 	}
 
 	public void BecomeDangerous()
@@ -59,6 +63,7 @@ public partial class KillObstacle : Area2D
 		GD.Print("KillObstacle becoming dangerous");
 		animatedSprite.Play(DangerousAnimationName);
 		_state = State.Dangerous;
+		_collisionShape.Disabled = true;
 		_remainingDangerTime = DangerousTime;
 		foreach (var body in GetOverlappingAreas())
 		{
@@ -91,6 +96,13 @@ public partial class KillObstacle : Area2D
 			_remainingFinishTime = FinishTime;
 			animatedSprite.Play(FinishedAnimationName);
 			(node as Word).Die();
+		}
+		else if (node is Player)
+		{
+			GD.Print("Player collision with Zap!");
+			_state = State.Finished;
+			_remainingFinishTime = FinishTime;
+			animatedSprite.Play(FinishedAnimationName);
 		}
 		else
 		{

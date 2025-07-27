@@ -31,23 +31,34 @@ public partial class EnemyHandler : Area2D
 		var oldPosition = Position;
 		Position += (Vector2)Direction * (float)delta * MoveSpeed;
 
-		if (map.HasPassedHalfTile(oldPosition, Position, Direction))
+		if (map.HasPassedFullTile(oldPosition, Position))
 		{
+			// GD.Print("Enemy passed Fulltile");
 			PickDirection();
 		}
-
 	}
 
 	private void PickDirection()
 	{
-		Position = map.SnapToHalfTile(Position);
+		var startPos = Position;
+		Position = map.SnapToFullTile(Position);
+		// GD.Print($"Snapping from {startPos} to {Position}");
 		var tile = map.GetTileInfo(Position);
 
 		if (tile.TileType == TileTypes.NoneGiven)
 		{
-			return;
+			// If we go off the map, Turn around!
+			// GD.Print("Enemy not in the map; turning around!");
+			Direction = -Direction;
 		}
-		Direction = tile.Directions.PickRandom();
+		else
+		{
+			var oldDirection = Direction;
+			Direction = tile.Directions.PickRandom();
+			// GD.Print($"Going from direction {oldDirection} to {Direction}");
+		}
+		// Also nudge enemy in its new direction to avoid re-triggering crossing the middle of a tile
+		Position += (Vector2)Direction * 0.01F;
 	}
 
 	private void CenterInTile()

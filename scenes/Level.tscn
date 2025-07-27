@@ -68,7 +68,6 @@ Speed = 200
 position = Vector2(650, 150)
 
 [node name="WordTimer" type="Timer" parent="."]
-wait_time = 5.0
 autostart = true
 
 [node name="DeathMessage" type="TextureRect" parent="."]

@@ -14,6 +14,8 @@ public partial class Player : Area2D
 	public int Speed { get; set; } = 400;
 
 	public Vector2 ScreenSize;
+
+	Vector2 PlayerInput = Vector2.Zero;
 	public Vector2 Direction = Vector2.Right;
 
 	private TileMapLayer tileMapLayer;
@@ -51,11 +53,6 @@ public partial class Player : Area2D
 		}
 
 		var isCentered = map.IsCentered(oldPos);
-
-		if (isCentered == false)
-		{
-			return;
-		}
 		var directionSet = false;
 		var currentTilePos = map.SnapToHalfTile(Position);
 
@@ -85,29 +82,30 @@ public partial class Player : Area2D
 			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Up))
 			{
 				directionSet = true;
-				Direction = Vector2.Right + Vector2.Up;
+				PlayerInput = Vector2.Right + Vector2.Up;
 				GD.Print($"player, move up right direction: {Direction}");
 			}
 			if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Up))
 			{
 				directionSet = true;
-				Direction = Vector2.Left + Vector2.Up;
+				PlayerInput = Vector2.Left + Vector2.Up;
 				GD.Print($"player, move up left direction: {Direction}");
 			}
 		}
+
 		else if (Input.IsActionPressed("move_down"))
 		{
 			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Down))
 			{
 				directionSet = true;
-				Direction = Vector2.Right + Vector2.Down;
+				PlayerInput = Vector2.Right + Vector2.Down;
 				GD.Print($"player, move down right direction: {Direction}");
 			}
 
 			if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Down))
 			{
 				directionSet = true;
-				Direction = Vector2.Left + Vector2.Down;
+				PlayerInput = Vector2.Left + Vector2.Down;
 				GD.Print($"player, move down left direction: {Direction}");
 			}
 		}
@@ -117,16 +115,26 @@ public partial class Player : Area2D
 			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
 			{
 				directionSet = true;
-				Direction = Vector2.Right;
+				PlayerInput = Vector2.Right;
 				GD.Print($"player, move right direction: {Direction}");
 			}
 
 			else if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left))
 			{
 				directionSet = true;
-				Direction = Vector2.Left;
+				PlayerInput = Vector2.Left;
 				GD.Print($"player, move left direction: {Direction}");
 			}
+		}
+
+		if (tile.Directions.Contains(PlayerInput))
+		{
+			
+		}
+
+		if (isCentered == false)
+		{
+			return;
 		}
 
 		if (directionSet)

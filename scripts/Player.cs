@@ -18,6 +18,8 @@ public partial class Player : Area2D
 
 	private TileMapLayer tileMapLayer;
 
+	private Vector2 previousDirection = Vector2.Right;
+
 	public void Start(Vector2 position)
 	{
 		Position = position;
@@ -44,97 +46,114 @@ public partial class Player : Area2D
 		var isCentered = map.IsCentered(oldPos);
 		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
 
-		if (isCentered)
+		if (isCentered == false)
 		{
-			var currentTilePos = map.SnapToHalfTile(Position);
-			var tile = map.GetTileInfo(Position);
-			var enumType = tile.TileType.GetType();
-			var enumName = Enum.GetName(enumType, tile.TileType);
-			GD.Print($"{nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
-			var positionsString = new StringBuilder();
+			return;
+		}
+		var directionSet = false;
+		var currentTilePos = map.SnapToHalfTile(Position);
+		var tile = map.GetTileInfo(Position);
+		var enumType = tile.TileType.GetType();
+		var enumName = Enum.GetName(enumType, tile.TileType);
+		GD.Print($"{nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
+		var positionsString = new StringBuilder();
 
-			for (int i = 0; i < tile.Directions.Count; i++)
+		for (int i = 0; i < tile.Directions.Count; i++)
+		{
+			if (i == 0)
 			{
-				if (i == 0)
-				{
-					positionsString.Append("player: ");
-				}
-				var currentDirection = tile.Directions[i];
-				positionsString.Append($"{currentDirection}");
-
-				if (i == tile.Directions.Count - 1)
-				{
-					positionsString.AppendLine();
-				}
+				positionsString.Append("player: ");
 			}
-			GD.Print(positionsString);
+			var currentDirection = tile.Directions[i];
+			positionsString.Append($"{currentDirection}");
 
-			if (Input.IsActionPressed("move_up"))
+			if (i == tile.Directions.Count - 1)
 			{
-				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Up))
-				{
-					var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y - 100);
-					Direction = (destinationTilePos - Position).Normalized();
-					GD.Print($"player, move up right direction: {Direction}");
-				}
-				if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Up))
-				{
-					Direction = Vector2I.Left + Vector2I.Up;
-					GD.Print($"player, move up left direction: {Direction}");
-				}
-			}
-			else if (Input.IsActionPressed("move_down"))
-			{
-				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Down))
-				{
-					Direction = Vector2I.Right + Vector2I.Down;
-					GD.Print($"player, direction: {Direction}");
-				}
-				if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Down))
-				{
-					Direction = Vector2I.Left + Vector2I.Down;
-					GD.Print($"player, direction: {Direction}");
-				}
-			}
-			else
-			{
-				if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
-				{
-					Direction = Vector2I.Right;
-					GD.Print($"player, direction: {Direction}");
-				}
-
-				else if (Input.IsActionPressed("move_left"))
-				{
-					if (tile.Directions.Contains(Vector2I.Left))
-					{
-						Direction = Vector2I.Left;
-						GD.Print($"player, direction: {Direction}");
-					}
-					else
-					{
-						GD.Print("Cannot move left at " + map.PixelToHalfTile(Position.X) + ":" + map.PixelToHalfTile(Position.Y));
-					}
-				}
-
-				else
-				{
-					GD.Print($"automatically choosing direction");
-
-					if (tile.Directions.Contains(Vector2I.Right))
-					{
-						GD.Print("automatically moved right");
-						Direction = Vector2I.Right;
-					}
-
-					else if(tile.Directions.Contains(Vector2I.Left))
-					{
-						GD.Print("automatically moved left");
-						Direction = Vector2I.Left;
-					}
-				}
+				positionsString.AppendLine();
 			}
 		}
+		GD.Print(positionsString);
+
+		if (Input.IsActionPressed("move_up"))
+		{
+			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Up))
+			{
+				directionSet = true;
+				previousDirection = Vector2.Right + Vector2.Up;
+				var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y - 100);
+				Direction = (destinationTilePos - Position).Normalized();
+				GD.Print($"player, move up right direction: {Direction}");
+			}
+			if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Up))
+			{
+				directionSet = true;
+				previousDirection = Vector2.Left + Vector2.Up;
+				var destinationTilePos = new Vector2(currentTilePos.X - 100, currentTilePos.Y - 100);
+				Direction = (destinationTilePos - Position).Normalized();
+				GD.Print($"player, move up left direction: {Direction}");
+			}
+		}
+		else if (Input.IsActionPressed("move_down"))
+		{
+			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right + Vector2I.Down))
+			{
+				directionSet = true;
+				previousDirection = Vector2.Right + Vector2.Down;
+				var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y + 100);
+				Direction = (destinationTilePos - Position).Normalized();
+				GD.Print($"player, move down right direction: {Direction}");
+			}
+
+			if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Down))
+			{
+				directionSet = true;
+				previousDirection = Vector2.Left + Vector2.Down;
+				var destinationTilePos = new Vector2(currentTilePos.X - 100, currentTilePos.Y + 100);
+				Direction = (destinationTilePos - Position).Normalized();
+				GD.Print($"player, move down left direction: {Direction}");
+			}
+		}
+
+		else
+		{
+			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
+			{
+				directionSet = true;
+				previousDirection = Vector2.Right;
+				var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y);
+				Direction = (destinationTilePos - Position).Normalized();
+				GD.Print($"player, move right direction: {Direction}");
+			}
+
+			else if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left))
+			{
+				directionSet = true;
+				previousDirection = Vector2.Left;
+				var destinationTilePos = new Vector2(currentTilePos.X - 100, currentTilePos.Y);
+				Direction = (destinationTilePos - Position).Normalized();
+				GD.Print($"player, move left direction: {Direction}");
+			}
+		}
+
+		if (directionSet)
+		{
+			GD.Print("direction SET");
+			return;
+		}
+
+		GD.Print($"automatically choosing direction");
+
+		if (tile.Directions.Contains((Vector2I)previousDirection))
+		{
+			var destinationTilePos = new Vector2(currentTilePos.X + 100 * previousDirection.X, currentTilePos.Y + 100 * previousDirection.Y);
+			Direction = (destinationTilePos - Position).Normalized();
+			GD.Print($"automatically chosen direction: {Direction}");
+			return;
+		}
+
+		var targetPos = new Vector2(currentTilePos.X + 100 * tile.Directions[0].X, currentTilePos.Y + 100 * tile.Directions[0].Y);
+		Direction = (targetPos - Position).Normalized();
+		GD.Print($"automatically chosen direction: {Direction}");
 	}
 
 	private void SetCameraTimeMapLayer()

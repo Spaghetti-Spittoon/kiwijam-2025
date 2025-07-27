@@ -11,7 +11,7 @@ public partial class Player : Area2D
 	public delegate void HitEventHandler();
 
 	[Export]
-	public int Speed { get; set; } = 600;
+	public int Speed { get; set; } = 100;
 
 	public Vector2 ScreenSize;
 

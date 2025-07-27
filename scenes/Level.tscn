@@ -58,7 +58,7 @@ position = Vector2(976, 472)
 
 [node name="Player" parent="." instance=ExtResource("5_dke22")]
 position = Vector2(350, 250)
-Speed = 100
+Speed = 200
 
 [node name="EnemySpawnLocation" type="Marker2D" parent="."]
 position = Vector2(650, 150)

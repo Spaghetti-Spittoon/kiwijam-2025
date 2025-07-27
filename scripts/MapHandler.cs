@@ -131,4 +131,12 @@ public class MapHandler
 		result.Y = PixelToTile(oldPos.Y + GridSize) * GridSize;
 		return result;
 	}
+
+	public Vector2 SnapToCenterOfTile(Vector2 position)
+	{
+		return new Vector2(
+			(float)Math.Floor((position.X + QuarterGridSize) / GridSize) * GridSize + HalfGridSize,
+			(float)Math.Floor((position.Y + QuarterGridSize) / GridSize) * GridSize + HalfGridSize
+		);
+	}
 }

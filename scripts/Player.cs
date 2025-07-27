@@ -132,16 +132,11 @@ public partial class Player : Area2D
 			Direction = PlayerInput;
 		}
 
-		if (isCentered == false)
-		{
-			return;
-		}
-		Direction = PlayerInput;
-
-		if (directionSet)
+		if (isCentered && directionSet)
 		{
 			hasHitBoundary = false;
 			GD.Print("direction SET");
+			Direction = PlayerInput;
 			return;
 		}
 

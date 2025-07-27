@@ -171,7 +171,7 @@ public partial class Player : Area2D
 		if (tile.Directions.Contains((Vector2I)previousDirection))
 		{
 			var destinationTilePos = new Vector2(currentTilePos.X + 100 * previousDirection.X, currentTilePos.Y + 100 * previousDirection.Y);
-			Direction = (destinationTilePos - Position).Normalized();
+			Direction = destinationTilePos.Normalized();
 			GD.Print($"automatically chosen direction: {Direction}");
 			return;
 		}
@@ -185,7 +185,7 @@ public partial class Player : Area2D
 
 		//randomly select a direction since there is at least one!
 		var targetPos = new Vector2(currentTilePos.X + 100 * tile.Directions[0].X, currentTilePos.Y + 100 * tile.Directions[0].Y);
-		Direction = (targetPos - Position).Normalized();
+		Direction = targetPos.Normalized();
 		GD.Print($"automatically chosen direction: {Direction}");
 	}
 

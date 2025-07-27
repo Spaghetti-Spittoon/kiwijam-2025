@@ -3,9 +3,7 @@ using System;
 
 public partial class Level : Node2D
 {
-	[Export]
-	public PackedScene EnemyScene { get; set; }
-
+	private PackedScene enemyScene;
 
 	TileMapLayer mapLayer;
 	SignalBus bus;
@@ -14,6 +12,7 @@ public partial class Level : Node2D
 
 	public override void _Ready()
 	{
+		enemyScene = ResourceLoader.Load("res://scenes/enemy.tscn") as PackedScene;
 		mapLayer = GetNode<TileMapLayer>("TileMapLayer");
 		bus = GetNode<SignalBus>("/root/SignalBus");
 		button = GetNode<Button>("TestIncreaseButton");
@@ -56,7 +55,7 @@ public partial class Level : Node2D
 
 	private void AddEnemy()
 	{
-		Area2D enemy = EnemyScene.Instantiate<Area2D>();
+		Area2D enemy = enemyScene.Instantiate<Area2D>();
 
 		var enemySpawnLocation = GetNode<Marker2D>("EnemySpawnLocation");
 

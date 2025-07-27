@@ -14,7 +14,6 @@ public partial class CameraLimiter : Camera2D
 	{
 		var tileMapUsedPosition = tileMapLayer.GetUsedRect().Position;
 		var tileMapUsedSize = tileMapLayer.GetUsedRect().Size;
-		GD.Print(tileMapLayer.GetUsedRect());
 
 		SetLimit(Side.Left, ConvertLowerCoordinateToPixels(tileMapUsedPosition.X));
 		SetLimit(Side.Right, ConvertHigherCoordinateToPixels(tileMapUsedSize.X) > screenSize.X ? ConvertHigherCoordinateToPixels(tileMapUsedSize.X) : (int) screenSize.X);

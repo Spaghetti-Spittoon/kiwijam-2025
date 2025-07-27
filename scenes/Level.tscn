@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=4 uid="uid://bopa0xia4ehi1"]
+[gd_scene load_steps=7 format=4 uid="uid://bopa0xia4ehi1"]
 
 [ext_resource type="Script" uid="uid://ckopa6xxeaib0" path="res://scripts/Level.cs" id="1_6vs76"]
 [ext_resource type="Texture2D" uid="uid://cg3kfchlv6ps5" path="res://assets/gridtiles/tileset.png" id="2_dke22"]
 [ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
 [ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
-[ext_resource type="PackedScene" uid="uid://dd2jqukc7yhej" path="res://scenes/word.tscn" id="6_dke22"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4qegb"]
 texture = ExtResource("2_dke22")
@@ -61,9 +60,6 @@ position = Vector2(976, 472)
 position = Vector2(350, 250)
 Speed = 100
 
-[node name="Word" parent="." instance=ExtResource("6_dke22")]
-position = Vector2(456, 248)
-
 [node name="TestIncreaseButton" type="Button" parent="."]
 offset_left = 632.0
 offset_top = 312.0
@@ -73,3 +69,9 @@ text = "Increase Size"
 
 [node name="EnemySpawnLocation" type="Marker2D" parent="."]
 position = Vector2(650, 150)
+
+[node name="WordTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="WordTimer" to="." method="OnWordTimerTimeout"]

@@ -15,7 +15,6 @@ public partial class Level : Node2D
 	TileMapLayer mapLayer;
 	SignalBus bus;
 	Grid grid;
-	Button button;
 	RandomNumberGenerator rng;
 	List<Node2D> spawnedObstacles;
 	MapHandler mapHandler;
@@ -26,10 +25,7 @@ public partial class Level : Node2D
 		wordScene = ResourceLoader.Load("res://scenes/word.tscn") as PackedScene;
 		mapLayer = GetNode<TileMapLayer>("TileMapLayer");
 		bus = GetNode<SignalBus>("/root/SignalBus");
-		button = GetNode<Button>("TestIncreaseButton");
 		grid = GetNode<Grid>("/root/Grid");
-		button.ButtonUp += OnLevelExpanded;
-		bus.LevelExpanded += OnLevelExpanded;
 
 		var wordsFile = FileAccess.Open("res://assets/phone_words.json", FileAccess.ModeFlags.Read);
 		var wordsString = wordsFile.GetAsText();
@@ -49,13 +45,6 @@ public partial class Level : Node2D
 		};
 
 		AddEnemy();
-	}
-
-	void OnLevelExpanded()
-	{
-		GD.Print(nameof(OnLevelExpanded));
-		int sourceId = mapLayer.TileSet.GetSourceId(0);
-		grid.ExpandOneLevel(mapLayer, sourceId);
 	}
 
 	TileSetSource GetNamedTile(string tileName)

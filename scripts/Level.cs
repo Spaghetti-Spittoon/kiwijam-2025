@@ -5,7 +5,6 @@ using System.Linq;
 
 public partial class Level : Node2D
 {
-	[Export]
 	private Godot.Collections.Dictionary<PackedScene, float> WeightedObstacles;
 
 	private PackedScene enemyScene;
@@ -43,6 +42,11 @@ public partial class Level : Node2D
 		rng = new RandomNumberGenerator();
 		spawnedObstacles = new List<Node2D>();
 		mapHandler = new MapHandler(mapLayer);
+
+		WeightedObstacles = new Godot.Collections.Dictionary<PackedScene, float>
+		{
+			{GD.Load<PackedScene>("res://scenes/obstacles/obstacle_line_cut.tscn"), 1.0F},
+		};
 
 		AddEnemy();
 	}

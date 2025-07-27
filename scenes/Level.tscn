@@ -3,8 +3,7 @@
 [ext_resource type="Script" uid="uid://ckopa6xxeaib0" path="res://scripts/Level.cs" id="1_6vs76"]
 [ext_resource type="Texture2D" uid="uid://cg3kfchlv6ps5" path="res://assets/gridtiles/tileset.png" id="2_dke22"]
 [ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
-[ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
-[ext_resource type="PackedScene" uid="uid://sq7alqrtphpj" path="res://scenes/obstacles/obstacle_line_cut.tscn" id="7_faw0r"]
+[ext_resource type="PackedScene" uid="uid://hwl5vfeatuq5" path="res://scenes/player.tscn" id="5_dke22"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2eouu"]
 texture = ExtResource("2_dke22")
@@ -40,9 +39,6 @@ sources/3 = SubResource("TileSetAtlasSource_2eouu")
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_6vs76")
-WeightedObstacles = Dictionary[PackedScene, float]({
-ExtResource("7_faw0r"): 1.0
-})
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(1, 0)

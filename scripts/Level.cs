@@ -19,6 +19,7 @@ public partial class Level : Node2D
 		grid = GetNode<Grid>("/root/Grid");
 		button.ButtonUp += OnLevelExpanded;
 		bus.LevelExpanded += OnLevelExpanded;
+		AddEnemy();
 	}
 
 	void OnLevelExpanded()

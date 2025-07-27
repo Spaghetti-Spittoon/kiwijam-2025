@@ -64,11 +64,6 @@ public partial class Player : Area2D
 		Position += (float)delta * (Vector2)Direction * Speed;
 		var isCentered = map.IsCentered(oldPos);
 
-		if (hasHitBoundary)
-		{
-			return;
-		}
-
 		if (isCentered == false)
 		{
 			return;

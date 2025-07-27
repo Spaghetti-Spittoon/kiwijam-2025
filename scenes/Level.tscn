@@ -53,7 +53,7 @@ tile_set = SubResource("TileSet_k5jlv")
 [node name="Phone" parent="." instance=ExtResource("2_k5jlv")]
 position = Vector2(376, 472)
 
-[node name="Phone2" parent="." instance=ExtResource("2_k5jlv")]
+[node name="TargetPhone" parent="." instance=ExtResource("2_k5jlv")]
 position = Vector2(976, 472)
 
 [node name="Player" parent="." instance=ExtResource("5_dke22")]

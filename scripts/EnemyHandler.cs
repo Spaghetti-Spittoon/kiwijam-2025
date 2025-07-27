@@ -24,6 +24,9 @@ public partial class EnemyHandler : Area2D
 		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");
 		map = new MapHandler(layer);
 		PickDirection();
+		
+		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		animatedSprite2D.Play();
 	}
 
 	public override void _Process(double delta)

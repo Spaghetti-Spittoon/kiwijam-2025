@@ -1,7 +1,13 @@
 using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class Level : Node2D
 {
+	[Export]
+	private Godot.Collections.Dictionary<PackedScene, float> WeightedObstacles;
+
 	private PackedScene enemyScene;
 	private PackedScene wordScene;
 
@@ -11,6 +17,9 @@ public partial class Level : Node2D
 	SignalBus bus;
 	Grid grid;
 	Button button;
+	RandomNumberGenerator rng;
+	List<Node2D> spawnedObstacles;
+	MapHandler mapHandler;
 
 	public override void _Ready()
 	{
@@ -30,6 +39,10 @@ public partial class Level : Node2D
 		words = (string[]) jsonAsDictionary["phone_words"];
 
 		wordsFile.Close();
+
+		rng = new RandomNumberGenerator();
+		spawnedObstacles = new List<Node2D>();
+		mapHandler = new MapHandler(mapLayer);
 
 		AddEnemy();
 	}
@@ -63,6 +76,11 @@ public partial class Level : Node2D
 		if (Input.IsActionJustReleased("add_coin"))
 		{
 			AddEnemy();
+			const uint numObstacles = 3;
+			for (int i = 0; i < numObstacles; ++i)
+			{
+				AddObstacle();
+			}
 		}
 	}
 
@@ -90,5 +108,76 @@ public partial class Level : Node2D
 		word.Position = phoneLocation.Position;
 
 		AddChild(word);
+	}
+
+	private void AddObstacle()
+	{
+		// Already occupied spots
+		var occupiedSpots = spawnedObstacles.Where(IsInstanceValid).Select(
+			obstacle => obstacle.Position
+		);
+
+		// Find available spots
+		const float halfEdgeLength = 50.0F;
+
+		var possibleSpots = mapLayer.GetUsedCells().SelectMany((position) =>
+		{
+			var center = mapLayer.ToGlobal(mapLayer.MapToLocal(position));
+			return mapHandler.GetTileAtCellCoords(position).Directions.Select(
+				(direction) => (center + (Vector2)direction * halfEdgeLength).Round()
+			);
+		}).Distinct().Except(occupiedSpots).ToArray();
+
+		if (possibleSpots.Length < 1)
+		{
+			GD.Print("No possible spots for an obstacle");
+			return;
+		}
+
+		var rng = new RandomNumberGenerator();
+
+		if (possibleSpots.Length < 1)
+		{
+			GD.Print("No spots to spawn an obstacle");
+			return;
+		}
+
+		var spot = possibleSpots[rng.RandiRange(0, possibleSpots.Length - 1)];
+
+		var obstacleScene = pickRandomObstacle();
+
+		var newObstacle = obstacleScene.Instantiate();
+		if (newObstacle is not Node2D)
+		{
+			GD.PushError("Picked an Obstacle Scene that wasn't a Node2D!");
+			return;
+		}
+		var newObstacle2D = newObstacle as Node2D;
+		AddChild(newObstacle);
+		newObstacle2D.Position = spot;
+		spawnedObstacles.Add(newObstacle2D);
+		GD.Print($"Created Obstacle at: {spot}");
+	}
+
+	private PackedScene pickRandomObstacle()
+	{
+		if (WeightedObstacles.Count < 1)
+		{
+			GD.PushError("No obstacles available to pick from");
+			return null;
+		}
+		var totalWeight = WeightedObstacles.Select((scene_weight) => scene_weight.Value).Sum();
+
+		var randomWeight = rng.RandfRange(0.0F, totalWeight);
+
+		foreach (var scene_weight in WeightedObstacles)
+		{
+			if (randomWeight <= scene_weight.Value)
+			{
+				return scene_weight.Key;
+			}
+			randomWeight -= scene_weight.Value;
+		}
+		return WeightedObstacles.First().Key;
 	}
 }

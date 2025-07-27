@@ -56,7 +56,7 @@ public class TileDefinition
 			case TileTypes.RightEnd:
 				topLeft = true;
 				left = true;
-				bottomRight = true;
+				bottomLeft = true;
 				break;
 
 			case TileTypes.SailBotLeft:

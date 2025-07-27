@@ -15,9 +15,17 @@ public partial class Level : Node2D
 	TileMapLayer mapLayer;
 	SignalBus bus;
 	Grid grid;
+
+	Button button;
+	TextureRect death;
+	bool dead = false;
+
 	RandomNumberGenerator rng;
 	List<Node2D> spawnedObstacles;
 	MapHandler mapHandler;
+	
+	private float elapsedTime = 0.0f;
+	private const float interval = 5.0f;
 
 	private int score;
 
@@ -31,6 +39,7 @@ public partial class Level : Node2D
 		player = GetNode<Player>("Player");
 		bus = GetNode<SignalBus>("/root/SignalBus");
 		grid = GetNode<Grid>("/root/Grid");
+		death = GetNode<TextureRect>("DeathMessage");
 
 		var wordsFile = FileAccess.Open("res://assets/phone_words.json", FileAccess.ModeFlags.Read);
 		var wordsString = wordsFile.GetAsText();
@@ -39,6 +48,7 @@ public partial class Level : Node2D
 		words = (string[])jsonAsDictionary["phone_words"];
 
 		wordsFile.Close();
+		death.Visible = false;
 
 		rng = new RandomNumberGenerator();
 		spawnedObstacles = new List<Node2D>();
@@ -73,12 +83,30 @@ public partial class Level : Node2D
 	{
 		if (Input.IsActionJustReleased("add_coin"))
 		{
-			AddEnemy();
-			const uint numObstacles = 3;
-			for (int i = 0; i < numObstacles; ++i)
+			if (!dead)
 			{
-				AddObstacle();
+				AddEnemy();
+
+				const uint numObstacles = 3;
+				for (int i = 0; i < numObstacles; ++i)
+				{
+					AddObstacle();
+				}
 			}
+			
+			else
+			{
+				GetTree().ChangeSceneToFile("res://scenes/HomeScreen.tscn");
+			}
+		}
+
+		//timer
+		elapsedTime += (float)delta;
+		
+		if (elapsedTime >= interval)
+		{
+			elapsedTime = 0.0f;
+			AddEnemy();
 		}
 	}
 
@@ -111,6 +139,12 @@ public partial class Level : Node2D
 		word.Position = phoneLocation.Position;
 
 		AddChild(word);
+	}
+
+	private void OnPlayerHit()
+	{
+		death.Visible = true;
+		dead = true;
 	}
 
 	private void AddObstacle()

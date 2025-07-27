@@ -24,7 +24,7 @@ public partial class EnemyHandler : Area2D
 		var layer = parent.GetNode<TileMapLayer>("TileMapLayer");
 		map = new MapHandler(layer);
 		PickDirection();
-		
+
 		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		animatedSprite2D.Play();
 	}
@@ -75,4 +75,6 @@ public partial class EnemyHandler : Area2D
 		Position = new Vector2(XTile * GridSize + HalfGridSize, YTile * GridSize + HalfGridSize);
 	}
 
+	private float elapsedTime = 0.0f;
+	private const float interval = 20.0f;
 }

@@ -2,6 +2,7 @@ using Godot;
 using Godot.Collections;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 
@@ -42,7 +43,7 @@ public class MapHandler
 
 	public TileDefinition GetTileInfo(Vector2 worldSpacePosition)
 	{
-		GD.Print($"{nameof(GetTileInfo)}, input: {worldSpacePosition}");
+		// GD.Print($"{nameof(GetTileInfo)}, input: {worldSpacePosition}");
 		// Convert world position to local coordinates relative to TileMapLayer
 		Vector2 localPos = _map.ToLocal(worldSpacePosition);
 
@@ -53,9 +54,15 @@ public class MapHandler
 		return GetTileAtAtlasCoords(atlasCoords);
 	}
 
+	public TileDefinition GetTileAtCellCoords(Vector2I cellCoords)
+	{
+		Vector2I atlasCoords = _map.GetCellAtlasCoords(cellCoords);
+		return GetTileAtAtlasCoords(atlasCoords);
+	}
+
 	public TileDefinition GetTileAtAtlasCoords(Vector2I atlasCoords)
 	{
-		GD.Print($"{nameof(GetTileAtAtlasCoords)}, input: {atlasCoords}");
+		// GD.Print($"{nameof(GetTileAtAtlasCoords)}, input: {atlasCoords}");
 
 		if (atlasTiles.ContainsKey(atlasCoords))
 		{
@@ -63,7 +70,7 @@ public class MapHandler
 			match.AtlasCoordinates = atlasCoords;
 			return match;
 		}
-		GD.Print("no match");
+		// GD.Print($"No known tile at {atlasCoords} (might be background tile)");
 		return new TileDefinition(); //return empty since there is no tile info availablew
 	}
 
@@ -71,7 +78,7 @@ public class MapHandler
 	{
 		//Check that we weren't previously standing on the boundary
 		var oldHalf = SnapToHalfTile(oldPos);
-		if(oldHalf.X == oldPos.X && oldHalf.Y == oldPos.Y)
+		if (oldHalf.X == oldPos.X && oldHalf.Y == oldPos.Y)
 		{
 			return false;
 		}
@@ -95,6 +102,20 @@ public class MapHandler
 		return false;
 	}
 
+	public bool HasPassedFullTile(Vector2 startPos, Vector2 endPos)
+	{
+		var fullTileCoords = (new float[] { startPos.X, startPos.Y, endPos.X, endPos.Y }).Select(
+			coord => (int)Math.Floor((coord + 50.0) / 100.0F)
+		).ToArray();
+
+		var x1 = fullTileCoords[0];
+		var y1 = fullTileCoords[1];
+		var x2 = fullTileCoords[2];
+		var y2 = fullTileCoords[3];
+
+		return x1 != x2 || y1 != y2;
+	}
+
 	internal Vector2 SnapToHalfTile(Vector2 oldPos)
 	{
 		var result = new Vector2();
@@ -103,4 +124,11 @@ public class MapHandler
 		return result;
 	}
 
+	public Vector2 SnapToFullTile(Vector2 inPos)
+	{
+		return new Vector2(
+			(float)Math.Floor((inPos.X + 25.0) / 100.0) * 100.0F + 50.0F,
+			(float)Math.Floor((inPos.Y + 25.0) / 100.0) * 100.0F + 50.0F
+		);
+	}
 }

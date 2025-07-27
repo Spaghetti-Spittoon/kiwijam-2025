@@ -5,8 +5,9 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jde5u"]
 
-[node name="obstacle_line_cut" type="Area2D" node_paths=PackedStringArray("animatedSprite")]
+[node name="obstacle_line_cut" type="Area2D" node_paths=PackedStringArray("_collisionShape", "animatedSprite")]
 script = ExtResource("1_553wt")
+_collisionShape = NodePath("CollisionShape2D")
 animatedSprite = NodePath("AnimatedSprite2D")
 SafeAnimationName = "safe_sparks"
 DangerousAnimationName = "dangerous_sparks"

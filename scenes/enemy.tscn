@@ -1,25 +1,57 @@
-[gd_scene load_steps=4 format=3 uid="uid://y2y6igxmiwh3"]
+[gd_scene load_steps=9 format=3 uid="uid://xd5a2bppy8tu"]
 
 [ext_resource type="Script" uid="uid://niaqiqu1g5my" path="res://scripts/EnemyHandler.cs" id="1_g5f4b"]
-[ext_resource type="Texture2D" uid="uid://df38h4k8r61po" path="res://assets/tex_tempenemy.png" id="2_5wlsd"]
+[ext_resource type="Texture2D" uid="uid://b2v161vmaumld" path="res://assets/Enemy-sheet.png" id="2_md0e3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yfb0i"]
 size = Vector2(50, 49.5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ra3w"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5uy6h"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4w8v"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwavj"]
+atlas = ExtResource("2_md0e3")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nenq2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ra3w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5uy6h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4w8v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwavj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Enemy" type="Area2D"]
 collision_mask = 0
 script = ExtResource("1_g5f4b")
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_left = -25.0
-offset_top = -25.0
-offset_right = 25.0
-offset_bottom = 25.0
-texture = ExtResource("2_5wlsd")
-expand_mode = 1
-metadata/_edit_use_anchors_ = true
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.25)
 shape = SubResource("RectangleShape2D_yfb0i")
 debug_color = Color(1, 0, 0, 0.419608)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 3)
+sprite_frames = SubResource("SpriteFrames_nenq2")
+frame_progress = 0.447934

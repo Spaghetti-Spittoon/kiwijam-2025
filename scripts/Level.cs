@@ -30,6 +30,8 @@ public partial class Level : Node2D
 		words = (string[]) jsonAsDictionary["phone_words"];
 
 		wordsFile.Close();
+		
+		AddEnemy();
 	}
 
 	void OnLevelExpanded()

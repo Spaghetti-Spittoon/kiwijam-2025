@@ -88,7 +88,7 @@ public class MapHandler
 		var message = $"snapped: {snapped}, offsetFifty: {offsetFifty}, diffX: {diffX}, diffY: {diffY}, crossedCenterX: {crossedCenterX}, crossedCenterY: {crossedCenterY}, isCentered: {isCentered}";
 		GD.Print(message);
 
-		if (canvas != null)
+		if (canvas != null) //print a string on screen
 		{
 			Font font = ThemeDB.FallbackFont;
 			var position = new Vector2(-400, -200);

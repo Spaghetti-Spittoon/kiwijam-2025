@@ -18,6 +18,9 @@ public partial class Level : Node2D
 	RandomNumberGenerator rng;
 	List<Node2D> spawnedObstacles;
 	MapHandler mapHandler;
+	
+	private float elapsedTime = 0.0f;
+	private const float interval = 5.0f;
 
 	public override void _Ready()
 	{
@@ -31,7 +34,7 @@ public partial class Level : Node2D
 		var wordsString = wordsFile.GetAsText();
 		var parsedJson = Json.ParseString(wordsString);
 		var jsonAsDictionary = parsedJson.AsGodotDictionary();
-		words = (string[]) jsonAsDictionary["phone_words"];
+		words = (string[])jsonAsDictionary["phone_words"];
 
 		wordsFile.Close();
 
@@ -74,6 +77,15 @@ public partial class Level : Node2D
 			{
 				AddObstacle();
 			}
+		}
+
+		//timer
+		elapsedTime += (float)delta;
+		
+		if (elapsedTime >= interval)
+		{
+			elapsedTime = 0.0f;
+			AddEnemy();
 		}
 	}
 

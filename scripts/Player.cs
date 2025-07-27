@@ -39,6 +39,25 @@ public partial class Player : Area2D
 		animatedSprite2D.Play();
 	}
 
+	public override void _Draw()
+	{
+		var oldPos = Position;
+		var isCentered = map.IsCentered(oldPos, this);
+		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}");
+
+
+		if (isCentered == false)
+		{
+			var rect1 = new Rect2(new Vector2(50, 50), new Vector2(10, 10));
+			Color color1 = new Color(1, 0, 0); // Red
+			DrawRect(rect1, color1);
+			return;
+		}
+		var rect = new Rect2(new Vector2(50, 50), new Vector2(10, 10));
+		Color color = new Color(1, 0, 0); // Green
+		DrawRect(rect, color);
+	}
+
 	public override void _Process(double delta)
 	{
 		var oldPos = Position;

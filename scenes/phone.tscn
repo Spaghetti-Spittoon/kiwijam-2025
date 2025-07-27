@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b0jn11d5vaqh"]
 
-[ext_resource type="Texture2D" uid="uid://dtrm6kx71svn2" path="res://assets/phone.png" id="1_08mii"]
+[ext_resource type="Texture2D" uid="uid://bbudcssijc6oj" path="res://assets/TargetPhone.png" id="1_08mii"]
 
 [node name="Phone" type="Node2D"]
 

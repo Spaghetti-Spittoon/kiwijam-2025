@@ -91,10 +91,10 @@ frame_progress = 0.493536
 
 [node name="Insert Coin" type="Label" parent="."]
 texture_filter = 1
-offset_left = 478.0
+offset_left = 344.0
 offset_top = 632.0
-offset_right = 848.0
+offset_right = 997.0
 offset_bottom = 716.0
 theme = SubResource("Theme_gi7ve")
 theme_override_font_sizes/font_size = 60
-text = "INSERT COIN"
+text = "INSERT COIN / PRESS C"

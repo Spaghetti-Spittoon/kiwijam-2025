@@ -19,6 +19,7 @@ public partial class Player : Area2D
 	private TileMapLayer tileMapLayer;
 
 	private Vector2 previousDirection = Vector2.Right;
+	bool hasHitBoundary = false;
 
 	public void Start(Vector2 position)
 	{
@@ -141,8 +142,8 @@ public partial class Player : Area2D
 			if (Input.IsActionPressed("move_right") && tile.Directions.Contains(Vector2I.Right))
 			{
 				directionSet = true;
+				previousDirection = Direction;
 				Direction = Vector2.Right;
-				// previousDirection = Vector2.Right;
 				// var destinationTilePos = new Vector2(currentTilePos.X + 100, currentTilePos.Y);
 				// Direction = (destinationTilePos - Position).Normalized();
 				GD.Print($"player, move right direction: {Direction}");
@@ -151,8 +152,8 @@ public partial class Player : Area2D
 			else if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left))
 			{
 				directionSet = true;
+				previousDirection = Direction;
 				Direction = Vector2.Left;
-				// previousDirection = Vector2.Left;
 				// var destinationTilePos = new Vector2(currentTilePos.X - 100, currentTilePos.Y);
 				// Direction = (destinationTilePos - Position).Normalized();
 				GD.Print($"player, move left direction: {Direction}");
@@ -161,20 +162,29 @@ public partial class Player : Area2D
 
 		if (directionSet)
 		{
+			hasHitBoundary = false;
 			GD.Print("direction SET");
 			return;
 		}
 
-
-		if (tile.Directions.Contains((Vector2I)previousDirection))
+		//let the player keep moving without input
+		if (tile.Directions.Contains((Vector2I)previousDirection)) 
 		{
+			hasHitBoundary = false;
 			return;
 		}
 
 		if (tile.Directions.Count == 0)
 		{
+			if (hasHitBoundary)
+			{
+				return; //continue travelling in the opposite direction
+			}
+			hasHitBoundary = true;
 			GD.Print("no directions. this tile is out of bounds. turn around!");
+			var copyDirection = Direction;
 			Direction = -previousDirection;
+			previousDirection = copyDirection;
 			return;
 		}
 

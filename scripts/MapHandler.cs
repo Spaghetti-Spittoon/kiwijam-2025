@@ -41,11 +41,11 @@ public class MapHandler
 		_map = inputMap;
 	}
 
-	public TileDefinition GetTileInfo(Vector2 worldSpacePosition)
+	public TileDefinition GetTileInfo(Godot.Vector2 worldSpacePosition)
 	{
 		// GD.Print($"{nameof(GetTileInfo)}, input: {worldSpacePosition}");
 		// Convert world position to local coordinates relative to TileMapLayer
-		Vector2 localPos = _map.ToLocal(worldSpacePosition);
+		Godot.Vector2 localPos = _map.ToLocal(worldSpacePosition);
 
 		// Convert local position to cell (map) coordinates
 		Vector2I cellPos = _map.LocalToMap(localPos);
@@ -74,18 +74,24 @@ public class MapHandler
 		return new TileDefinition(); //return empty since there is no tile info availablew
 	}
 
-	public bool IsCentered(Vector2 oldPos)
+	public bool IsCentered(Godot.Vector2 oldPos)
 	{
+		const int center = 50;
+		const int boundaryOffset = 20;
 		//Check that we weren't previously standing on the boundary
-		var center = SnapToHalfTile(oldPos); //assume this is the center
-		var crossedCenterX = Math.Abs(center.X - oldPos.X) < 50;
-		var crossedCenterY = Math.Abs(center.Y - oldPos.Y) < 50;
+		var snapped = SnapToHalfTile(oldPos);
+		var absoluted = new Vector2I(Math.Abs(snapped.X), Math.Abs(snapped.Y));
+		var maskedX = (int)absoluted.X & 0b111111;
+		var maskedY = (int)absoluted.Y & 0b111111;
+		var outsideCenterX = maskedX > center + boundaryOffset || maskedX < center - boundaryOffset;
+		var outsideCenterY = maskedY > center + boundaryOffset || maskedY < center - boundaryOffset;
+		GD.Print($"IsCentered, maskedX: {maskedX}, maskedY: {maskedY}, outsideCenterX: {outsideCenterX}, outsideCenterY: {outsideCenterY}");
 
-		if (crossedCenterX && crossedCenterY)
+		if (outsideCenterX || outsideCenterY)
 		{
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	public bool HasPassedFullTile(Vector2 startPos, Vector2 endPos)
@@ -103,7 +109,7 @@ public class MapHandler
 	}
 
 
-	public Vector2I SnapToHalfTile(Vector2 oldPos)
+	public Vector2I SnapToHalfTile(Godot.Vector2 oldPos)
 	{
 		var result = new Vector2I();
 		result.X = PixelToHalfTile(oldPos.X + HalfGridSize / 2) * HalfGridSize;

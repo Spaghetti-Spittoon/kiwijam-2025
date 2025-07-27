@@ -127,15 +127,16 @@ public partial class Player : Area2D
 			}
 		}
 
-		if (tile.Directions.Contains(PlayerInput))
+		if (PlayerInput == -Direction)
 		{
-			
+			Direction = PlayerInput;
 		}
 
 		if (isCentered == false)
 		{
 			return;
 		}
+		Direction = PlayerInput;
 
 		if (directionSet)
 		{

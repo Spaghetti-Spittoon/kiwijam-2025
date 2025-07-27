@@ -86,6 +86,7 @@ texture_filter = 1
 position = Vector2(249, 453)
 scale = Vector2(3.35246, 3.35246)
 sprite_frames = SubResource("SpriteFrames_i3b6o")
+autoplay = "default"
 frame_progress = 0.493536
 
 [node name="Insert Coin" type="Label" parent="."]

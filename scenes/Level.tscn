@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
 [ext_resource type="Texture2D" uid="uid://b8rpb0af7ygoc" path="res://assets/Death.png" id="5_qifjx"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4qegb"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2eouu"]
 texture = ExtResource("2_dke22")
 texture_region_size = Vector2i(100, 100)
 0:0/0 = 0
@@ -36,7 +36,7 @@ texture_region_size = Vector2i(100, 100)
 
 [sub_resource type="TileSet" id="TileSet_k5jlv"]
 tile_size = Vector2i(100, 100)
-sources/3 = SubResource("TileSetAtlasSource_4qegb")
+sources/3 = SubResource("TileSetAtlasSource_2eouu")
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_6vs76")
@@ -59,14 +59,7 @@ position = Vector2(976, 472)
 
 [node name="Player" parent="." instance=ExtResource("5_dke22")]
 position = Vector2(350, 250)
-Speed = 100
-
-[node name="TestIncreaseButton" type="Button" parent="."]
-offset_left = 632.0
-offset_top = 312.0
-offset_right = 784.0
-offset_bottom = 360.0
-text = "Increase Size"
+Speed = 200
 
 [node name="EnemySpawnLocation" type="Marker2D" parent="."]
 position = Vector2(650, 150)

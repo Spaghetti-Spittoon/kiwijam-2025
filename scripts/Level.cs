@@ -1,7 +1,12 @@
 using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class Level : Node2D
 {
+	private Godot.Collections.Dictionary<PackedScene, float> WeightedObstacles;
+
 	private PackedScene enemyScene;
 	private PackedScene wordScene;
 
@@ -10,9 +15,17 @@ public partial class Level : Node2D
 	TileMapLayer mapLayer;
 	SignalBus bus;
 	Grid grid;
+
 	Button button;
 	TextureRect death;
 	bool dead = false;
+
+	RandomNumberGenerator rng;
+	List<Node2D> spawnedObstacles;
+	MapHandler mapHandler;
+	
+	private float elapsedTime = 0.0f;
+	private const float interval = 5.0f;
 
 	public override void _Ready()
 	{
@@ -20,12 +33,8 @@ public partial class Level : Node2D
 		wordScene = ResourceLoader.Load("res://scenes/word.tscn") as PackedScene;
 		mapLayer = GetNode<TileMapLayer>("TileMapLayer");
 		bus = GetNode<SignalBus>("/root/SignalBus");
-		button = GetNode<Button>("TestIncreaseButton");
 		grid = GetNode<Grid>("/root/Grid");
 		death = GetNode<TextureRect>("DeathMessage");
-
-		button.ButtonUp += OnLevelExpanded;
-		bus.LevelExpanded += OnLevelExpanded;
 
 		var wordsFile = FileAccess.Open("res://assets/phone_words.json", FileAccess.ModeFlags.Read);
 		var wordsString = wordsFile.GetAsText();
@@ -36,14 +45,16 @@ public partial class Level : Node2D
 		wordsFile.Close();
 		death.Visible = false;
 
-		AddEnemy();
-	}
+		rng = new RandomNumberGenerator();
+		spawnedObstacles = new List<Node2D>();
+		mapHandler = new MapHandler(mapLayer);
 
-	void OnLevelExpanded()
-	{
-		GD.Print(nameof(OnLevelExpanded));
-		int sourceId = mapLayer.TileSet.GetSourceId(0);
-		grid.ExpandOneLevel(mapLayer, sourceId);
+		WeightedObstacles = new Godot.Collections.Dictionary<PackedScene, float>
+		{
+			{GD.Load<PackedScene>("res://scenes/obstacles/obstacle_line_cut.tscn"), 1.0F},
+		};
+
+		AddEnemy();
 	}
 
 	TileSetSource GetNamedTile(string tileName)
@@ -70,11 +81,27 @@ public partial class Level : Node2D
 			if (!dead)
 			{
 				AddEnemy();
+
+				const uint numObstacles = 3;
+				for (int i = 0; i < numObstacles; ++i)
+				{
+					AddObstacle();
+				}
 			}
+			
 			else
 			{
 				GetTree().ChangeSceneToFile("res://scenes/HomeScreen.tscn");
 			}
+		}
+
+		//timer
+		elapsedTime += (float)delta;
+		
+		if (elapsedTime >= interval)
+		{
+			elapsedTime = 0.0f;
+			AddEnemy();
 		}
 	}
 
@@ -108,5 +135,76 @@ public partial class Level : Node2D
 	{
 		death.Visible = true;
 		dead = true;
+	}
+
+	private void AddObstacle()
+	{
+		// Already occupied spots
+		var occupiedSpots = spawnedObstacles.Where(IsInstanceValid).Select(
+			obstacle => obstacle.Position
+		);
+
+		// Find available spots
+		const float halfEdgeLength = 50.0F;
+
+		var possibleSpots = mapLayer.GetUsedCells().SelectMany((position) =>
+		{
+			var center = mapLayer.ToGlobal(mapLayer.MapToLocal(position));
+			return mapHandler.GetTileAtCellCoords(position).Directions.Select(
+				(direction) => (center + (Vector2)direction * halfEdgeLength).Round()
+			);
+		}).Distinct().Except(occupiedSpots).ToArray();
+
+		if (possibleSpots.Length < 1)
+		{
+			GD.Print("No possible spots for an obstacle");
+			return;
+		}
+
+		var rng = new RandomNumberGenerator();
+
+		if (possibleSpots.Length < 1)
+		{
+			GD.Print("No spots to spawn an obstacle");
+			return;
+		}
+
+		var spot = possibleSpots[rng.RandiRange(0, possibleSpots.Length - 1)];
+
+		var obstacleScene = pickRandomObstacle();
+
+		var newObstacle = obstacleScene.Instantiate();
+		if (newObstacle is not Node2D)
+		{
+			GD.PushError("Picked an Obstacle Scene that wasn't a Node2D!");
+			return;
+		}
+		var newObstacle2D = newObstacle as Node2D;
+		AddChild(newObstacle);
+		newObstacle2D.Position = spot;
+		spawnedObstacles.Add(newObstacle2D);
+		GD.Print($"Created Obstacle at: {spot}");
+	}
+
+	private PackedScene pickRandomObstacle()
+	{
+		if (WeightedObstacles.Count < 1)
+		{
+			GD.PushError("No obstacles available to pick from");
+			return null;
+		}
+		var totalWeight = WeightedObstacles.Select((scene_weight) => scene_weight.Value).Sum();
+
+		var randomWeight = rng.RandfRange(0.0F, totalWeight);
+
+		foreach (var scene_weight in WeightedObstacles)
+		{
+			if (randomWeight <= scene_weight.Value)
+			{
+				return scene_weight.Key;
+			}
+			randomWeight -= scene_weight.Value;
+		}
+		return WeightedObstacles.First().Key;
 	}
 }

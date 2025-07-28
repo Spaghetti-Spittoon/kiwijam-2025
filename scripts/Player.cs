@@ -57,7 +57,7 @@ public partial class Player : Area2D
 		{
 			hasHitBoundary = true;
 			Direction = -Direction;
-			GD.Print($"invalid type type. direction flipped to: {Direction}");
+			// GD.Print($"invalid type type. direction flipped to: {Direction}");
 		}
 
 		var isCentered = IsPlayerCentered(oldPos);
@@ -66,7 +66,7 @@ public partial class Player : Area2D
 
 		var enumType = tile.TileType.GetType();
 		var enumName = Enum.GetName(enumType, tile.TileType);
-		GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}, {nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
+		// GD.Print($"{nameof(Player)}: oldpos: {oldPos}, Position: {Position}, {nameof(Player)}: snappedPosition: {Position}, tile: {enumName}");
 		var positionsString = new StringBuilder();
 
 		for (int i = 0; i < tile.Directions.Count; i++)
@@ -83,7 +83,7 @@ public partial class Player : Area2D
 				positionsString.AppendLine();
 			}
 		}
-		GD.Print(positionsString);
+		// GD.Print(positionsString);
 
 		if (Input.IsActionPressed("move_up"))
 		{
@@ -91,13 +91,13 @@ public partial class Player : Area2D
 			{
 				directionSet = true;
 				PlayerInput = Vector2.Right + Vector2.Up;
-				GD.Print($"player, move up right direction: {Direction}");
+				// GD.Print($"player, move up right direction: {Direction}");
 			}
 			if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Up))
 			{
 				directionSet = true;
 				PlayerInput = Vector2.Left + Vector2.Up;
-				GD.Print($"player, move up left direction: {Direction}");
+				// GD.Print($"player, move up left direction: {Direction}");
 			}
 		}
 
@@ -107,14 +107,14 @@ public partial class Player : Area2D
 			{
 				directionSet = true;
 				PlayerInput = Vector2.Right + Vector2.Down;
-				GD.Print($"player, move down right direction: {Direction}");
+				// GD.Print($"player, move down right direction: {Direction}");
 			}
 
 			if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left + Vector2I.Down))
 			{
 				directionSet = true;
 				PlayerInput = Vector2.Left + Vector2.Down;
-				GD.Print($"player, move down left direction: {Direction}");
+				// GD.Print($"player, move down left direction: {Direction}");
 			}
 		}
 
@@ -124,21 +124,21 @@ public partial class Player : Area2D
 			{
 				directionSet = true;
 				PlayerInput = Vector2.Right;
-				GD.Print($"player, move right direction: {Direction}");
+				// GD.Print($"player, move right direction: {Direction}");
 			}
 
 			else if (Input.IsActionPressed("move_left") && tile.Directions.Contains(Vector2I.Left))
 			{
 				directionSet = true;
 				PlayerInput = Vector2.Left;
-				GD.Print($"player, move left direction: {Direction}");
+				// GD.Print($"player, move left direction: {Direction}");
 			}
 		}
 
 		if (PlayerInput == -Direction && directionSet) //let the player move backwards at any time
 		{
 			hasHitBoundary = false;
-			GD.Print($"flipped on user input to: {PlayerInput}");
+			// GD.Print($"flipped on user input to: {PlayerInput}");
 			Direction = PlayerInput;
 			return;
 		}
@@ -146,7 +146,7 @@ public partial class Player : Area2D
 		if (isCentered && directionSet)
 		{
 			hasHitBoundary = false;
-			GD.Print("direction SET");
+			// GD.Print("direction SET");
 			Direction = PlayerInput;
 			return;
 		}
@@ -154,19 +154,19 @@ public partial class Player : Area2D
 		//let the player keep moving without input
 		if (tile.Directions.Contains((Vector2I)Direction))
 		{
-			GD.Print($"valid auto direction: {Direction}");
+			// GD.Print($"valid auto direction: {Direction}");
 			hasHitBoundary = false;
 			return;
 		}
 
 		if (hasHitBoundary)
 		{
-			GD.Print($"has hit boundary. current direction: {Direction}");
+			// GD.Print($"has hit boundary. current direction: {Direction}");
 			return; //continue travelling in the opposite direction
 		}
 		hasHitBoundary = true;
 		Direction = -Direction;
-		GD.Print($"player has reached a boundary. Turning arround to direction: {Direction}");
+		// GD.Print($"player has reached a boundary. Turning arround to direction: {Direction}");
 	}
 
 	private void SetCameraTimeMapLayer()

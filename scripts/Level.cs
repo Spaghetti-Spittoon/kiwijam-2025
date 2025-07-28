@@ -39,7 +39,7 @@ public partial class Level : Node2D
 		player = GetNode<Player>("Player");
 		bus = GetNode<SignalBus>("/root/SignalBus");
 		grid = GetNode<Grid>("/root/Grid");
-		death = GetNode<TextureRect>("DeathMessage");
+		death = GetNode<TextureRect>("gameovermessage");
 
 		var wordsFile = FileAccess.Open("res://assets/phone_words.json", FileAccess.ModeFlags.Read);
 		var wordsString = wordsFile.GetAsText();
@@ -143,6 +143,7 @@ public partial class Level : Node2D
 
 	private void OnPlayerHit()
 	{
+		GD.Print("Player has died.");
 		death.Visible = true;
 		dead = true;
 	}

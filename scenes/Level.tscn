@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cg3kfchlv6ps5" path="res://assets/gridtiles/tileset.png" id="2_dke22"]
 [ext_resource type="PackedScene" uid="uid://b0jn11d5vaqh" path="res://scenes/phone.tscn" id="2_k5jlv"]
 [ext_resource type="PackedScene" uid="uid://cddai83v88cgu" path="res://scenes/player.tscn" id="5_dke22"]
-[ext_resource type="Texture2D" uid="uid://b8rpb0af7ygoc" path="res://assets/Death.png" id="5_qifjx"]
+[ext_resource type="Texture2D" uid="uid://b8rpb0af7ygoc" path="res://assets/gameover.png" id="5_qifjx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2eouu"]
 texture = ExtResource("2_dke22")
@@ -70,7 +70,7 @@ position = Vector2(650, 150)
 [node name="WordTimer" type="Timer" parent="."]
 autostart = true
 
-[node name="DeathMessage" type="TextureRect" parent="."]
+[node name="gameovermessage" type="TextureRect" parent="."]
 offset_left = -8.0
 offset_top = 202.0
 offset_right = 1405.0
